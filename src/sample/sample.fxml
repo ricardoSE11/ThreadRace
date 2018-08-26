@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.canvas.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+
+<SplitPane dividerPositions="0.7336683417085427" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" orientation="VERTICAL" prefHeight="473.0" prefWidth="651.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+  <items>
+    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+         <children>
+            <Pane fx:id="paneDibujo" layoutX="12.0" layoutY="12.0" prefHeight="318.0" prefWidth="625.0">
+               <children>
+                  <Canvas fx:id="canvasDibujo" height="291.0" layoutX="14.0" layoutY="14.0" width="600.0" />
+               </children>
+            </Pane>
+         </children></AnchorPane>
+    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+         <children>
+            <Button fx:id="btnPrueba" layoutX="25.0" layoutY="70.0" mnemonicParsing="false" onAction="#prueba" text="Prueba" />
+            <TextField fx:id="txfPrueba" layoutX="102.0" layoutY="70.0" prefHeight="17.0" prefWidth="78.0" />
+            <Button fx:id="btnInitVehicles" layoutX="26.0" layoutY="23.0" mnemonicParsing="false" onAction="#initVehicles" text="Start" />
+            <Button fx:id="btnBarrier" layoutX="92.0" layoutY="23.0" mnemonicParsing="false" onAction="#turnOnBarrier" prefHeight="31.0" prefWidth="78.0" text="Barrier" />
+         </children></AnchorPane>
+  </items>
+</SplitPane>
