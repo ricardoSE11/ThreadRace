@@ -194,10 +194,14 @@ public class Controller {
     public void changeDirection(){
 
         if(goingDown==false){
-            vehicles.get(0).setGoingDown(true);
+            for (MovingVehicle currentVehicle:vehicles) {
+                currentVehicle.setGoingDown(true);
+            }
             goingDown=true;
         }else{
-            vehicles.get(0).setGoingDown(false);
+            for (MovingVehicle currentVehicle:vehicles) {
+                currentVehicle.setGoingDown(false);
+            }
             goingDown=false;
         }
 
