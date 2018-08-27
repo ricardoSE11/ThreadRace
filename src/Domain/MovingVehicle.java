@@ -9,11 +9,26 @@ import javafx.scene.image.Image;
 
 public class MovingVehicle extends Vehicle {
 
+    private int speedThread;
+
 
 
     public MovingVehicle(int x, int y, int imgNum , boolean isMoving , boolean isGoingDown, Speeds speed) throws FileNotFoundException {
         super(x, y, imgNum , isMoving , isGoingDown , speed);
         setSprite();
+        switch (this.getSpeed()){
+            case SLOW:
+                speedThread=100;
+                break;
+
+            case MEDIUM:
+                speedThread=75;
+                break;
+
+            case FAST:
+                speedThread=50;
+                break;
+        }
 
     }
     
@@ -37,53 +52,29 @@ public class MovingVehicle extends Vehicle {
             try {
                  {
                     if (!this.isMoving()) {
+                        Thread.sleep(100);
 
                     }else{
                         if(!this.isGoingDown()){
                             if (this.getY() < 630)
                             {
-                                switch (this.getSpeed()){
-                                    case SLOW:
-                                        Thread.sleep(100);
-                                        break;
-
-                                    case MEDIUM:
-                                        Thread.sleep(75);
-                                        break;
-
-                                    case FAST:
-                                        Thread.sleep(50);
-                                        break;
-                                }
+                                Thread.sleep(speedThread);
                                 super.setImage(sprite.get(getImgNum()));
                                 this.setY(getY() + 10);
                                 //System.out.println(" -DOWN- ");
                             }
-
                             else {
                                 this.setY(0);
                             }
-                        }else{
+                        }
+                        else{
                             if (this.getY() > 0)
                             {
-                                switch (this.getSpeed()){
-                                    case SLOW:
-                                        Thread.sleep(100);
-                                        break;
-
-                                    case MEDIUM:
-                                        Thread.sleep(75);
-                                        break;
-
-                                    case FAST:
-                                        Thread.sleep(50);
-                                        break;
-                                }
+                                Thread.sleep(speedThread);
                                 super.setImage(sprite.get(getImgNum()+3));
                                 this.setY(getY() - 10);
                                 //System.out.println(" -DOWN- ");
                             }
-
                             else {
                                 this.setY(630);
                             }

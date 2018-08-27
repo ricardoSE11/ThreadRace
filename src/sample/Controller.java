@@ -19,10 +19,11 @@ import java.util.ArrayList;
 
 public class Controller {
 
-    public ArrayList<Vehicle> vehicles;
+    public ArrayList<MovingVehicle> vehicles;
 
     //Vars
     private boolean areBarriersOn;
+    private boolean trafficLigth;
 
     //Vars GUI
     private int speed=0;
@@ -53,6 +54,7 @@ public class Controller {
 
         areBarriersOn = false;
         goingDown = false;
+        trafficLigth= true;
             /*for(int i = 0 ; i<11 ; i++){
                 MovingVehicle jc2 = new MovingVehicle(x, y, 1 , true , true );
                 vehicles.add(jc2);
@@ -101,7 +103,6 @@ public class Controller {
     }
 
     public void initVehicles() throws FileNotFoundException {
-        System.out.println("Hola");
         int number = Integer.parseInt(txfNumberOfCars.getText());
         int x =145;
         int y = 45;
@@ -234,18 +235,27 @@ public class Controller {
 
     public void interruptVehicleMovement(){
 
-        if(vehicles.get(0).isMoving()==true){
+        if(trafficLigth){
+
             Image imageTrafficLigthRed = new Image("Assets/traffic_light_red_icon.png");
             imageTrafficLigth.setImage(imageTrafficLigthRed);
-            for (Vehicle currentVehicle:vehicles) {
+            for (MovingVehicle currentVehicle:vehicles) {
                 currentVehicle.setMoving(false);
+                //System.out.println("set Moving false");
             }
+            trafficLigth=false;
+            //System.out.println("Is Moving false");
+
         }else{
+
             Image imageTrafficLigthGreen = new Image("Assets/traffic_light_green_icon.png");
             imageTrafficLigth.setImage(imageTrafficLigthGreen);
-            for (Vehicle currentVehicle:vehicles) {
+            for (MovingVehicle currentVehicle:vehicles) {
                 currentVehicle.setMoving(true);
+                //System.out.println("set Moving true");
             }
+            trafficLigth=true;
+            //System.out.println("Is Moving true");
         }
     }
 }
