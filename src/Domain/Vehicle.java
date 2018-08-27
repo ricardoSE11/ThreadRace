@@ -1,12 +1,15 @@
 package Domain;
 
 import java.util.ArrayList;
+
+import Utility.Speeds;
 import javafx.scene.image.Image;
 
 public class Vehicle extends Thread{
 
     private int x;
     private int y;
+    private Speeds speed;
     private int imgNum;
     private Image image;
     private ArrayList<Image> sprite;
@@ -15,15 +18,25 @@ public class Vehicle extends Thread{
     private boolean isGoingDown;
     
 
-    public Vehicle(int x, int y, int imgNum , boolean isMoving , boolean isGoingDown) {
+    public Vehicle(int x, int y, int imgNum , boolean isMoving , boolean isGoingDown , Speeds speed) {
         this.x = x;
         this.y = y;
         this.imgNum = imgNum;
         this.sprite = new ArrayList<Image>();
 
+        this.speed = speed;
+
         this.isMoving = isMoving;
         this.isGoingDown = isGoingDown;
 
+    }
+
+    public Speeds getSpeed() {
+        return speed;
+    }
+
+    public void setSpeed(Speeds speed) {
+        this.speed = speed;
     }
 
     public boolean isMoving() {

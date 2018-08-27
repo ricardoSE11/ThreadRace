@@ -2,11 +2,13 @@ package sample;
 
 import Domain.Vehicle;
 import Domain.MovingVehicle;
+import Utility.Speeds;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
 import java.io.FileInputStream;
@@ -17,17 +19,25 @@ import java.util.ArrayList;
 
 public class Controller {
 
-    ArrayList<Vehicle> vehicles;
+    public ArrayList<Vehicle> vehicles;
+
     //Vars
     private boolean areBarriersOn;
+
+    //Vars GUI
+    private int speed=0;
 
     //UI
     private Stage stage;
     private GraphicsContext g;
     private Image bgImage;
+    private Boolean goingDown;
 
-    @FXML private TextField txfPrueba;
+    @FXML private TextField txfNumberOfCars;
     @FXML private Canvas canvasDibujo;
+    @FXML private ImageView imageCar;
+    @FXML private ImageView imageSpeedometer;
+    @FXML private ImageView imageTrafficLigth;
 
 
     public Controller()
@@ -38,38 +48,34 @@ public class Controller {
 
     public void init(Stage stage)
     {
-        try
-        {
-            vehicles = new ArrayList<>();
-            this.stage = stage;
+        vehicles = new ArrayList<>();
+        this.stage = stage;
 
-            areBarriersOn = false;
-
-            MovingVehicle jc2 = new MovingVehicle(555, 45, 1 , true , true );
-            //jc2.start();
-            MovingVehicle jc = new MovingVehicle(420, 370, 0 , true , true);
-            //jc.start();
-
-            vehicles.add(jc2);
-            vehicles.add(jc);
-        }
-
-        catch (FileNotFoundException e)
-        {
-        e.printStackTrace();
-        }
+        areBarriersOn = false;
+        goingDown = false;
+            /*for(int i = 0 ; i<11 ; i++){
+                MovingVehicle jc2 = new MovingVehicle(x, y, 1 , true , true );
+                vehicles.add(jc2);
+                x+=140;
+            }*/
 
 
     }
 
     public void prueba()
     {
-        if (txfPrueba.getText().toString().equals(""))
+        if (txfNumberOfCars.getText().toString().equals(""))
             System.out.println("ME DOY CUENTA DE QUE ESTOY VACÍO YEIBOR");
-        System.out.println("Txf input: " + txfPrueba.getText());
+        System.out.println("Txf input: " + txfNumberOfCars.getText());
         setUpSimulationGraphics();
+        vehicles.get(1).setMoving(false);
+        vehicles.get(0).setMoving(false);
+        vehicles.get(3).setMoving(false);
+        vehicles.get(7).setMoving(false);
+        vehicles.get(8).setMoving(false);
+        vehicles.get(5).setMoving(false);
 
-        vehicles.get(1).setMoving(true);
+
     }
 
     public void setUpSimulationGraphics()
@@ -94,16 +100,39 @@ public class Controller {
 
     }
 
-    public void initVehicles()
-    {
-        for (Vehicle currentVehicle : this.vehicles)
-        {
-            currentVehicle.start();
+    public void initVehicles() throws FileNotFoundException {
+        System.out.println("Hola");
+        int number = Integer.parseInt(txfNumberOfCars.getText());
+        int x =145;
+        int y = 45;
+        Speeds vel;
+        for(int i = 0 ; i<number ; i++){
+            switch (speed){
+                case 0 :
+                    vel=Speeds.SLOW;
+                    MovingVehicle jc0 = new MovingVehicle(x, y, speed , true , false , vel);
+                    vehicles.add(jc0);
+                    jc0.start();
+                    break;
+                case 1 :
+                    vel=Speeds.MEDIUM;
+                    MovingVehicle jc1 = new MovingVehicle(x, y, speed , true , false , vel);
+                    vehicles.add(jc1);
+                    jc1.start();
+                    break;
+                case 2 :
+                    vel=Speeds.FAST;
+                    MovingVehicle jc2 = new MovingVehicle(x, y, speed , true , false , vel);
+                    vehicles.add(jc2);
+                    jc2.start();
+                    break;
+            }
+            x+=140;
         }
     }
 
     public void turnOnBarrier() throws InterruptedException {
-        String laneNumbersString = txfPrueba.getText().toString();
+        String laneNumbersString = txfNumberOfCars.getText().toString();
         /*if(!areBarriersOn)
         {
             System.out.println("Attempting to pause Vehicle Threads");
@@ -133,9 +162,12 @@ public class Controller {
                 currentVehicle.wait();
             }
         }*/
-        vehicles.get(1).setMoving(false);
-
-
+        vehicles.get(1).setMoving(true);
+        vehicles.get(0).setMoving(true);
+        vehicles.get(3).setMoving(true);
+        vehicles.get(7).setMoving(true);
+        vehicles.get(8).setMoving(true);
+        vehicles.get(5).setMoving(true);
     }
 
     public void reDraw(Image backgroundImage)
@@ -155,4 +187,65 @@ public class Controller {
     }
 
 
+
+    //Voids GUI
+
+    public void changeDirection(){
+
+        if(goingDown==false){
+            vehicles.get(0).setGoingDown(true);
+            goingDown=true;
+        }else{
+            vehicles.get(0).setGoingDown(false);
+            goingDown=false;
+        }
+
+
+    }
+    public void increaseSpeed(){
+
+        int new_position_tachomer = speed+1;
+        if(new_position_tachomer<3){
+            speed=speed+1;
+            Image imageSpeed = new Image("Assets/speedometer_icon_"+speed+".png");
+            imageSpeedometer.setImage(imageSpeed);
+            Image imageC = new Image("Assets/car_icon_"+speed+".png");
+            imageCar.setImage(imageC);
+        }
+        else {
+            System.out.println("Alcanzo la velocidad maxima");
+        }
+    }
+
+    public void reduceSpeed(){
+
+        int new_position_tachomer = speed;
+        if(new_position_tachomer>0){
+            speed=speed-1;
+            Image imageSpeed = new Image("Assets/speedometer_icon_"+speed+".png");
+            imageSpeedometer.setImage(imageSpeed);
+            Image imageC = new Image("Assets/car_icon_"+speed+".png");
+            imageCar.setImage(imageC);
+        }
+        else {
+            System.out.println("Alcanzo la velocidad minima");
+        }
+    }
+
+    public void interruptVehicleMovement(){
+
+        if(vehicles.get(0).isMoving()==true){
+            Image imageTrafficLigthRed = new Image("Assets/traffic_light_red_icon.png");
+            imageTrafficLigth.setImage(imageTrafficLigthRed);
+            for (Vehicle currentVehicle:vehicles) {
+                currentVehicle.setMoving(false);
+            }
+        }else{
+            Image imageTrafficLigthGreen = new Image("Assets/traffic_light_green_icon.png");
+            imageTrafficLigth.setImage(imageTrafficLigthGreen);
+            for (Vehicle currentVehicle:vehicles) {
+                currentVehicle.setMoving(true);
+            }
+        }
+    }
 }
