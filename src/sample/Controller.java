@@ -1,5 +1,6 @@
 package sample;
 
+import Domain.Lane;
 import Domain.Vehicle;
 import Domain.MovingVehicle;
 import Utility.Speeds;
@@ -14,12 +15,14 @@ import javafx.stage.Stage;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-
+import java.util.Random;
 
 
 public class Controller {
 
-    public ArrayList<MovingVehicle> vehicles;
+    //TODO: Change this to a ArrayList<Lane>
+    private ArrayList<Lane> lanes;
+    private ArrayList<MovingVehicle> vehicles;
 
     //Vars
     private boolean areBarriersOn;
@@ -50,17 +53,45 @@ public class Controller {
     public void init(Stage stage)
     {
         vehicles = new ArrayList<>();
-        this.stage = stage;
-
+        lanes = new ArrayList<>();
         areBarriersOn = false;
         goingDown = false;
         trafficLigth= true;
-            /*for(int i = 0 ; i<11 ; i++){
-                MovingVehicle jc2 = new MovingVehicle(x, y, 1 , true , true );
-                vehicles.add(jc2);
-                x+=140;
-            }*/
 
+        this.stage = stage;
+
+        initiLanes();
+    }
+
+    public void initiLanes()
+    {
+        System.out.println("Created Lanes ArrayList");
+        int yTop = 0;
+        int yBottom = 630;
+
+        Lane laneOne = new Lane(145 , 235 , yTop , yBottom ,310 , 315 , true , false );
+        Lane laneTwo = new Lane(285 , 365 , yTop , yBottom ,310 , 315 , true , false );
+        Lane laneThree = new Lane(420 , 500 , yTop , yBottom ,310 , 315 , true , false );
+        Lane laneFour = new Lane(555 , 635 , yTop , yBottom ,310 , 315 , true , false );
+        Lane laneFive = new Lane(690 , 770 , yTop , yBottom ,310 , 315 , true , false );
+        Lane laneSix = new Lane(828 , 908 , yTop , yBottom ,310 , 315 , true , false );
+        Lane laneSeven = new Lane(962 , 1042 , yTop , yBottom ,310 , 315 , true , false );
+        Lane laneEight = new Lane(1100 , 1180 , yTop , yBottom ,310 , 315 , true , false );
+        Lane laneNine = new Lane(1235 , 1315 , yTop , yBottom ,310 , 315 , true , false );
+        Lane laneTen = new Lane(1370 , 1450 , yTop , yBottom ,310 , 315 , true , false );
+        Lane laneEleven = new Lane(1506 , 1586 , yTop , yBottom ,310 , 315 , true , false );
+
+        this.lanes.add(laneOne);
+        this.lanes.add(laneTwo);
+        this.lanes.add(laneThree);
+        this.lanes.add(laneFour);
+        this.lanes.add(laneFive);
+        this.lanes.add(laneSix);
+        this.lanes.add(laneSeven);
+        this.lanes.add(laneEight);
+        this.lanes.add(laneNine);
+        this.lanes.add(laneTen);
+        this.lanes.add(laneEleven);
 
     }
 
@@ -102,37 +133,50 @@ public class Controller {
 
     }
 
-    public void initVehicles() throws FileNotFoundException {
+    //TODO: Put this in Lane Class
+    public void initVehicles() throws FileNotFoundException
+    {
         int number = Integer.parseInt(txfNumberOfCars.getText());
-        int x =145;
-        int y = 45;
         Speeds vel;
+        int y = 45;
         for(int i = 0 ; i<number ; i++){
+            Random aleatorio = new Random(System.currentTimeMillis());
+            int intAletorio = aleatorio.nextInt(10);
+            aleatorio.setSeed(System.currentTimeMillis());
+            int x =lanes.get(intAletorio).getxLeft();
             switch (speed){
                 case 0 :
                     vel=Speeds.SLOW;
                     MovingVehicle jc0 = new MovingVehicle(x, y, speed , true , false , vel);
+                    lanes.get(intAletorio).getVehicles().add(jc0);
                     vehicles.add(jc0);
-                    jc0.start();
                     break;
                 case 1 :
                     vel=Speeds.MEDIUM;
                     MovingVehicle jc1 = new MovingVehicle(x, y, speed , true , false , vel);
+                    lanes.get(intAletorio).getVehicles().add(jc1);
                     vehicles.add(jc1);
-                    jc1.start();
                     break;
                 case 2 :
                     vel=Speeds.FAST;
                     MovingVehicle jc2 = new MovingVehicle(x, y, speed , true , false , vel);
+                    lanes.get(intAletorio).getVehicles().add(jc2);
                     vehicles.add(jc2);
-                    jc2.start();
                     break;
             }
             x+=140;
         }
+        for (Lane currentLane:lanes)
+        {
+            for (Vehicle currentVehicle:currentLane.getVehicles())
+            {
+                currentVehicle.start();
+            }
+        }
     }
 
-    public void turnOnBarrier() throws InterruptedException {
+    public void turnOnBarrier() throws InterruptedException
+    {
         String laneNumbersString = txfNumberOfCars.getText().toString();
         /*if(!areBarriersOn)
         {
@@ -187,26 +231,18 @@ public class Controller {
         g.drawImage(this.sc.getImage(), this.sc.getX(), this.sc.getY());*/
     }
 
-
-
     //Voids GUI
-
-    public void changeDirection(){
-
-        if(goingDown==false){
-            for (MovingVehicle currentVehicle:vehicles) {
-                currentVehicle.setGoingDown(true);
-            }
-            goingDown=true;
-        }else{
-            for (MovingVehicle currentVehicle:vehicles) {
-                currentVehicle.setGoingDown(false);
-            }
-            goingDown=false;
+    //TODO: Put this in Lane Class
+    public void changeDirection()
+    {
+        //Grab LaneArrayList and change direction
+        for (Lane currentLane : lanes) {
+            currentLane.changeMovementDirection();
+            //System.out.println("set Moving false");
         }
 
-
     }
+
     public void increaseSpeed(){
 
         int new_position_tachomer = speed+1;
@@ -243,23 +279,26 @@ public class Controller {
 
             Image imageTrafficLigthRed = new Image("Assets/traffic_light_red_icon.png");
             imageTrafficLigth.setImage(imageTrafficLigthRed);
-            for (MovingVehicle currentVehicle:vehicles) {
-                currentVehicle.setMoving(false);
+            for (Lane currentLane : lanes) {
+                currentLane.setTrafficLightRed(true);
                 //System.out.println("set Moving false");
             }
             trafficLigth=false;
             //System.out.println("Is Moving false");
 
-        }else{
+        }
+
+        else{
 
             Image imageTrafficLigthGreen = new Image("Assets/traffic_light_green_icon.png");
             imageTrafficLigth.setImage(imageTrafficLigthGreen);
-            for (MovingVehicle currentVehicle:vehicles) {
-                currentVehicle.setMoving(true);
-                //System.out.println("set Moving true");
+            for (Lane currentLane : lanes) {
+                currentLane.setTrafficLightRed(false);
+                //System.out.println("set Moving false");
             }
             trafficLigth=true;
             //System.out.println("Is Moving true");
         }
     }
+
 }
