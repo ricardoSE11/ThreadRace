@@ -30,6 +30,17 @@ public class Controller {
 
     //Vars GUI
     private int speed=0;
+    private boolean barrierOne = false;
+    private boolean barrierTwo = false;
+    private boolean barrierThree = false;
+    private boolean barrierFour = false;
+    private boolean barrierFive = false;
+    private boolean barrierSix = false;
+    private boolean barrierSeven = false;
+    private boolean barrierEight = false;
+    private boolean barrierNine = false;
+    private boolean barrierTen = false;
+    private boolean barrierEleven = false;
 
     //UI
     private Stage stage;
@@ -42,6 +53,18 @@ public class Controller {
     @FXML private ImageView imageCar;
     @FXML private ImageView imageSpeedometer;
     @FXML private ImageView imageTrafficLigth;
+    @FXML private ImageView imageBarrierOne;
+    @FXML private ImageView imageBarrierTwo;
+    @FXML private ImageView imageBarrierThree;
+    @FXML private ImageView imageBarrierFour;
+    @FXML private ImageView imageBarrierFive;
+    @FXML private ImageView imageBarrierSix;
+    @FXML private ImageView imageBarrierSeven;
+    @FXML private ImageView imageBarrierEight;
+    @FXML private ImageView imageBarrierNine;
+    @FXML private ImageView imageBarrierTen;
+    @FXML private ImageView imageBarrierEleven;
+
 
 
     public Controller()
@@ -68,18 +91,20 @@ public class Controller {
         System.out.println("Created Lanes ArrayList");
         int yTop = 0;
         int yBottom = 630;
+        int barrierUp=365;
+        int barrierBottom=370;
 
-        Lane laneOne = new Lane(145 , 235 , yTop , yBottom ,310 , 315 , true , false );
-        Lane laneTwo = new Lane(285 , 365 , yTop , yBottom ,310 , 315 , true , false );
-        Lane laneThree = new Lane(420 , 500 , yTop , yBottom ,310 , 315 , true , false );
-        Lane laneFour = new Lane(555 , 635 , yTop , yBottom ,310 , 315 , true , false );
-        Lane laneFive = new Lane(690 , 770 , yTop , yBottom ,310 , 315 , true , false );
-        Lane laneSix = new Lane(828 , 908 , yTop , yBottom ,310 , 315 , true , false );
-        Lane laneSeven = new Lane(962 , 1042 , yTop , yBottom ,310 , 315 , true , false );
-        Lane laneEight = new Lane(1100 , 1180 , yTop , yBottom ,310 , 315 , true , false );
-        Lane laneNine = new Lane(1235 , 1315 , yTop , yBottom ,310 , 315 , true , false );
-        Lane laneTen = new Lane(1370 , 1450 , yTop , yBottom ,310 , 315 , true , false );
-        Lane laneEleven = new Lane(1506 , 1586 , yTop , yBottom ,310 , 315 , true , false );
+        Lane laneOne = new Lane(145 , 235 , yTop , yBottom ,barrierUp , barrierBottom , true , false );
+        Lane laneTwo = new Lane(285 , 365 , yTop , yBottom ,barrierUp , barrierBottom , true , false );
+        Lane laneThree = new Lane(420 , 500 , yTop , yBottom ,barrierUp , barrierBottom , true , false );
+        Lane laneFour = new Lane(555 , 635 , yTop , yBottom ,barrierUp , barrierBottom , true , false );
+        Lane laneFive = new Lane(690 , 770 , yTop , yBottom ,barrierUp , barrierBottom , true , false );
+        Lane laneSix = new Lane(828 , 908 , yTop , yBottom ,barrierUp , barrierBottom , true , false );
+        Lane laneSeven = new Lane(962 , 1042 , yTop , yBottom ,barrierUp , barrierBottom , true , false );
+        Lane laneEight = new Lane(1100 , 1180 , yTop , yBottom ,barrierUp , barrierBottom , true , false );
+        Lane laneNine = new Lane(1235 , 1315 , yTop , yBottom ,barrierUp , barrierBottom , true , false );
+        Lane laneTen = new Lane(1370 , 1450 , yTop , yBottom ,barrierUp , barrierBottom , true , false );
+        Lane laneEleven = new Lane(1506 , 1586 , yTop , yBottom ,barrierUp , barrierBottom , true , false );
 
         this.lanes.add(laneOne);
         this.lanes.add(laneTwo);
@@ -118,8 +143,8 @@ public class Controller {
             bgImage = new Image(new FileInputStream("src/Assets/background_icon_0.png"));
 
             g = this.canvasDibujo.getGraphicsContext2D();
-            canvasDibujo.setWidth(1750);
-            canvasDibujo.setHeight(1050);
+            canvasDibujo.setWidth(1900);
+            canvasDibujo.setHeight(1000);
 
             g.drawImage(bgImage , 0 , 0);
 
@@ -141,7 +166,7 @@ public class Controller {
         int y = 45;
         for(int i = 0 ; i<number ; i++){
             Random aleatorio = new Random(System.currentTimeMillis());
-            int intAletorio = aleatorio.nextInt(10);
+            int intAletorio = aleatorio.nextInt(11);
             aleatorio.setSeed(System.currentTimeMillis());
             int x =lanes.get(intAletorio).getxLeft();
             switch (speed){
@@ -150,28 +175,24 @@ public class Controller {
                     MovingVehicle jc0 = new MovingVehicle(x, y, speed , true , false , vel);
                     lanes.get(intAletorio).getVehicles().add(jc0);
                     vehicles.add(jc0);
+                    jc0.start();
                     break;
                 case 1 :
                     vel=Speeds.MEDIUM;
                     MovingVehicle jc1 = new MovingVehicle(x, y, speed , true , false , vel);
                     lanes.get(intAletorio).getVehicles().add(jc1);
                     vehicles.add(jc1);
+                    jc1.start();
                     break;
                 case 2 :
                     vel=Speeds.FAST;
                     MovingVehicle jc2 = new MovingVehicle(x, y, speed , true , false , vel);
                     lanes.get(intAletorio).getVehicles().add(jc2);
                     vehicles.add(jc2);
+                    jc2.start();
                     break;
             }
             x+=140;
-        }
-        for (Lane currentLane:lanes)
-        {
-            for (Vehicle currentVehicle:currentLane.getVehicles())
-            {
-                currentVehicle.start();
-            }
         }
     }
 
@@ -217,10 +238,10 @@ public class Controller {
 
     public void reDraw(Image backgroundImage)
     {
-        canvasDibujo.setWidth(1750);
-        canvasDibujo.setHeight(1050);
+        canvasDibujo.setWidth(1900);
+        canvasDibujo.setHeight(1000);
         g = this.canvasDibujo.getGraphicsContext2D();
-        g.clearRect(0, 0, 1750, 1050);
+        g.clearRect(0, 0, 1900, 1000);
         g.drawImage(backgroundImage , 0 , 0);
 
         for (Vehicle currentVehicle : this.vehicles)
@@ -276,29 +297,205 @@ public class Controller {
     public void interruptVehicleMovement(){
 
         if(trafficLigth){
-
             Image imageTrafficLigthRed = new Image("Assets/traffic_light_red_icon.png");
             imageTrafficLigth.setImage(imageTrafficLigthRed);
             for (Lane currentLane : lanes) {
-                currentLane.setTrafficLightRed(true);
+                currentLane.interruptVehicleMovement();
                 //System.out.println("set Moving false");
             }
             trafficLigth=false;
             //System.out.println("Is Moving false");
-
         }
-
         else{
 
             Image imageTrafficLigthGreen = new Image("Assets/traffic_light_green_icon.png");
             imageTrafficLigth.setImage(imageTrafficLigthGreen);
             for (Lane currentLane : lanes) {
-                currentLane.setTrafficLightRed(false);
+                currentLane.interruptVehicleMovement();
                 //System.out.println("set Moving false");
             }
             trafficLigth=true;
             //System.out.println("Is Moving true");
         }
     }
+
+    public void turnOnBarrierOne()
+    {
+        if (barrierOne)
+        {
+            Image imageBarrier = new Image("Assets/barrier_icon.png");
+            imageBarrierOne.setImage(imageBarrier);
+            barrierOne=false;
+        }
+
+        else
+        {
+            Image imageBarrier = new Image("Assets/gray_icon.png");
+            imageBarrierOne.setImage(imageBarrier);
+            barrierOne=true;
+        }
+    }
+    public void turnOnBarrierTwo()
+    {
+        if (barrierTwo)
+        {
+            Image imageBarrier = new Image("Assets/barrier_icon.png");
+            imageBarrierTwo.setImage(imageBarrier);
+            barrierTwo=false;
+        }
+
+        else
+        {
+            Image imageBarrier = new Image("Assets/gray_icon.png");
+            imageBarrierTwo.setImage(imageBarrier);
+            barrierTwo=true;
+        }
+    }
+    public void turnOnBarrierThree()
+    {
+        if (barrierThree)
+        {
+            Image imageBarrier = new Image("Assets/barrier_icon.png");
+            imageBarrierThree.setImage(imageBarrier);
+            barrierThree=false;
+        }
+
+        else
+        {
+            Image imageBarrier = new Image("Assets/gray_icon.png");
+            imageBarrierThree.setImage(imageBarrier);
+            barrierThree=true;
+        }
+    }
+    public void turnOnBarrierFour()
+    {
+        if (barrierFour)
+        {
+            Image imageBarrier = new Image("Assets/barrier_icon.png");
+            imageBarrierFour.setImage(imageBarrier);
+            barrierFour=false;
+        }
+
+        else
+        {
+            Image imageBarrier = new Image("Assets/gray_icon.png");
+            imageBarrierFour.setImage(imageBarrier);
+            barrierFour=true;
+        }
+    }
+    public void turnOnBarrierFive()
+    {
+        if (barrierFive)
+        {
+            Image imageBarrier = new Image("Assets/barrier_icon.png");
+            imageBarrierFive.setImage(imageBarrier);
+            barrierFive=false;
+        }
+
+        else
+        {
+            Image imageBarrier = new Image("Assets/gray_icon.png");
+            imageBarrierFive.setImage(imageBarrier);
+            barrierFive=true;
+        }
+    }
+    public void turnOnBarrierSix()
+    {
+        if (barrierSix)
+        {
+            Image imageBarrier = new Image("Assets/barrier_icon.png");
+            imageBarrierSix.setImage(imageBarrier);
+            barrierSix=false;
+        }
+
+        else
+        {
+            Image imageBarrier = new Image("Assets/gray_icon.png");
+            imageBarrierSix.setImage(imageBarrier);
+            barrierSix=true;
+        }
+    }
+    public void turnOnBarrierSeven()
+    {
+        if (barrierSeven)
+        {
+            Image imageBarrier = new Image("Assets/barrier_icon.png");
+            imageBarrierSeven.setImage(imageBarrier);
+            barrierSeven=false;
+        }
+
+        else
+        {
+            Image imageBarrier = new Image("Assets/gray_icon.png");
+            imageBarrierSeven.setImage(imageBarrier);
+            barrierSeven=true;
+        }
+    }
+    public void turnOnBarrierEight()
+    {
+        if (barrierEight)
+        {
+            Image imageBarrier = new Image("Assets/barrier_icon.png");
+            imageBarrierEight.setImage(imageBarrier);
+            barrierEight=false;
+        }
+
+        else
+        {
+            Image imageBarrier = new Image("Assets/gray_icon.png");
+            imageBarrierEight.setImage(imageBarrier);
+            barrierEight=true;
+        }
+    }
+    public void turnOnBarrierNine()
+    {
+        if (barrierNine)
+        {
+            Image imageBarrier = new Image("Assets/barrier_icon.png");
+            imageBarrierNine.setImage(imageBarrier);
+            barrierNine=false;
+        }
+
+        else
+        {
+            Image imageBarrier = new Image("Assets/gray_icon.png");
+            imageBarrierNine.setImage(imageBarrier);
+            barrierNine=true;
+        }
+    }
+    public void turnOnBarrierTen()
+    {
+        if (barrierTen)
+        {
+            Image imageBarrier = new Image("Assets/barrier_icon.png");
+            imageBarrierTen.setImage(imageBarrier);
+            barrierTen=false;
+        }
+
+        else
+        {
+            Image imageBarrier = new Image("Assets/gray_icon.png");
+            imageBarrierTen.setImage(imageBarrier);
+            barrierTen=true;
+        }
+    }
+    public void turnOnBarrierEleven()
+    {
+        if (barrierEleven)
+        {
+            Image imageBarrier = new Image("Assets/barrier_icon.png");
+            imageBarrierEleven.setImage(imageBarrier);
+            barrierEleven=false;
+        }
+
+        else
+        {
+            Image imageBarrier = new Image("Assets/gray_icon.png");
+            imageBarrierEleven.setImage(imageBarrier);
+            barrierEleven=true;
+        }
+    }
+
+
 
 }

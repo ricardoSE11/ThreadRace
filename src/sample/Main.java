@@ -39,7 +39,8 @@ public class Main extends Application implements Runnable{
         initComponents(); //TODO: Reposition this.
 
         primaryStage.setTitle("Hello World");
-        primaryStage.setScene(new Scene(root, 750, 750));
+        primaryStage.setScene(new Scene(root, 1900, 1000));
+        //primaryStage.setFullScreen(true);
         primaryStage.show();
 
 
