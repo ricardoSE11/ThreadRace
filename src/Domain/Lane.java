@@ -111,7 +111,7 @@ public class Lane extends Thread {
         {
             for (MovingVehicle currentVehicle:vehicles)
             {
-                currentVehicle.setGoingDown(true);
+                currentVehicle.setGoingDown(false);
             }
             goingDown=true;
         }
@@ -119,7 +119,7 @@ public class Lane extends Thread {
         else{
             for (MovingVehicle currentVehicle:vehicles)
             {
-                currentVehicle.setGoingDown(false);
+                currentVehicle.setGoingDown(true);
             }
             goingDown=false;
         }
@@ -131,7 +131,7 @@ public class Lane extends Thread {
         if(trafficLightRed){
 
             for (MovingVehicle currentVehicle:vehicles) {
-                currentVehicle.setMoving(false);
+                currentVehicle.setMoving(true);
                 //System.out.println("set Moving false");
             }
             trafficLightRed =false;
@@ -141,7 +141,7 @@ public class Lane extends Thread {
 
         else{
             for (MovingVehicle currentVehicle:vehicles) {
-                currentVehicle.setMoving(true);
+                currentVehicle.setMoving(false);
                 //System.out.println("set Moving true");
             }
             trafficLightRed =true;
