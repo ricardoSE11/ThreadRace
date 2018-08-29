@@ -91,8 +91,8 @@ public class MovingVehicle extends Vehicle {
             try {
                 {
                     if(this.isMoving()){
-                        if(!this.isGoingDown()){
-                            if ((this.getY()-66) < 630)
+                        if(this.isGoingDown()){
+                            if ((this.getY()-80) < 630)
                             {
                                 super.setImage(sprite.get(getImgNum()));
                                 this.setY(getY() + 10);

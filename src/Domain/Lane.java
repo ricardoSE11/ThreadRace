@@ -125,25 +125,21 @@ public class Lane extends Thread {
         this.vehicles.add(vehicle);
     }
 
-    public void changeMovementDirection()
+    public void changeMovementDirection(Boolean direction)
     {
-        if(!goingDown)
-        {
-            for (MovingVehicle currentVehicle:vehicles)
+        this.goingDown = direction;
+        if(!this.goingDown){
+            for(int i = vehicles.size()-1 ; i >= 0  ; i--)
             {
-                currentVehicle.setGoingDown(false);
+                this.vehicles.get(i).setGoingDown(this.goingDown);
             }
-            goingDown=true;
         }
-
         else{
-            for (MovingVehicle currentVehicle:vehicles)
+            for(int x = 0 ; x < vehicles.size()  ; x++)
             {
-                currentVehicle.setGoingDown(true);
+                this.vehicles.get(x).setGoingDown(this.goingDown);
             }
-            goingDown=false;
         }
-
     }
 
     public void interruptVehicleMovement()
@@ -155,8 +151,8 @@ public class Lane extends Thread {
         }
     }
 
-    public void verifyMovement(){
-
+    public void verifyMovement()
+    {
         if(goingDown){
             for(int i = 0; i < this.vehicles.size(); i++){
                 MovingVehicle v = this.vehicles.get(i);
@@ -170,61 +166,47 @@ public class Lane extends Thread {
                 }else{
                     MovingVehicle nextVehicle = this.vehicles.get(i-1);
                     int posY_Next = (int) nextVehicle.getY() + 10;
-                    boolean accident = isThereAnAccident(posY_Next,posY,true);
-                    if(accident/* && !youShallNotPass(posY)*/){
+                    boolean accident = isThereAnAccident(posY,posY_Next,true);
+                    if(!accident/* && !youShallNotPass(posY)*/){
                         v.setMoving(false);
                     }else{
                         v.setMoving(true);
                     }
                 }
             }
-        }
-        else
-            {
-            int last = this.vehicles.size()-1;
+        }else{
             for(int i = 0; i < this.vehicles.size(); i++){
-                MovingVehicle v = this.vehicles.get(i);
-                int posY = (int)v.getY() + 10;//next iteration
-                if(i == last){
-                    /*if(!youShallNotPass(posY)){
-                        v.setMoving(false);
-                    }else{
-                        v.setMoving(true);
-                    }*/
+                MovingVehicle me = this.vehicles.get(i);
+                int posY_Me = me.getY() - 10;
+                if(i == this.vehicles.size()-1){
+                    System.out.println("Hcesss");
                 }else{
-                    MovingVehicle nextVehicle = this.vehicles.get(i+1);
-                    int posY_Next = (int) nextVehicle.getY() - 10;
-                    boolean accident = isThereAnAccident(posY_Next,posY,false);
-                    if(accident /*&& !youShallNotPass(posY)*/){
-                        v.setMoving(false);
+                    MovingVehicle beforeMe = this.vehicles.get(i + 1);
+                    int posY_BeforeMe = beforeMe.getY() - 10;
+                    boolean accident = isThereAnAccident(posY_BeforeMe, posY_Me,false);
+                    if(!accident/* && !youShallNotPass(posY)*/){
+                        me.setMoving(false);
                     }else{
-                        v.setMoving(true);
+                        me.setMoving(true);
                     }
                 }
             }
         }
     }
-    public boolean isThereAnAccident(int posY_VehicleOne, int posY_VehicleTwo, boolean direction){
 
-        if(direction){
-            if((posY_VehicleOne - 66) - (posY_VehicleTwo + 66) < 0){
-                return true;
-            }else{
-                return false;
-            }
+    public boolean isThereAnAccident(int posY_VehicleOne, int posY_VehicleTwo, boolean direction)
+    {
+        if(posY_VehicleOne - posY_VehicleTwo >= 128){
+            return false;
         }else{
-            if((posY_VehicleTwo - 66) - (posY_VehicleOne + 66) < 0){
-                return true;
-            }else{
-                return false;
-            }
+            return true;
         }
     }
 
     public boolean youShallNotPass(int posY_Vehicle){
         if(this.wall){
             //the vehicle is far of the wall
-            if(365 > (posY_Vehicle - 64) && 370 < (posY_Vehicle +64)){
+            if(360 <= posY_Vehicle && posY_Vehicle <= 380){
                 return false;
             }else{
                 return true;
@@ -238,10 +220,23 @@ public class Lane extends Thread {
 
         if(!this.vehicles.isEmpty()){
             MovingVehicle temp = this.vehicles.get(0);
-            int posY_FirstVehicle = (int)temp.getY() - 64;
-            if((posY_FirstVehicle+66) > 630){
+            int posY_FirstVehicle = temp.getY() - 64;
+            if((posY_FirstVehicle) > 630){
                 ((MovingVehicle) temp).setRunning(false);
                 this.vehicles.remove(0);
+            }
+        }
+
+    }
+
+    public void deleteLastVehicle(){
+
+        if(!this.vehicles.isEmpty()){
+            MovingVehicle temp = this.vehicles.get(vehicles.size()-1);
+            int posY_LastVehicle = temp.getY();
+            if((posY_LastVehicle) <= 0){
+                ((MovingVehicle) temp).setRunning(false);
+                this.vehicles.remove(vehicles.size()-1);
             }
         }
 
@@ -262,7 +257,7 @@ public class Lane extends Thread {
         v.setX(this.xLeft);
         if(!this.vehicles.isEmpty()){
             int posY_LastVehicle = getPosY_LastVehicle();
-            if((posY_LastVehicle-66) < 66){//I suppose this is the min posY of a vehicle
+            if((posY_LastVehicle-80) < 80){//I suppose this is the min posY of a vehicle
                 v.setMoving(false);
                 this.queueVehicles.add(v);
             }else{
@@ -278,13 +273,13 @@ public class Lane extends Thread {
     }
     
     public void checkQueue(){
-
         if(!this.queueVehicles.isEmpty()){
             int posY_LastVehicle = getPosY_LastVehicle();
-            if((posY_LastVehicle-66) > 66){
+            if((posY_LastVehicle-80) > 80) {
                 MovingVehicle v = this.queueVehicles.poll();
                 v.setMoving(true);
                 v.setGoingDown(goingDown);
+                this.vehicles.add(v);
             }
         }
     }
@@ -296,7 +291,9 @@ public class Lane extends Thread {
                 verifyMovement();
                 checkQueue();
                 deleteFirstVehicle();
-                Thread.sleep(10);
+                deleteLastVehicle();
+
+                Thread.sleep(30);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
