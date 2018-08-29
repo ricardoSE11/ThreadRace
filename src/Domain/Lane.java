@@ -170,7 +170,7 @@ public class Lane extends Thread {
                     MovingVehicle nextVehicle = this.vehicles.get(i-1);
                     int posY_Next = (int) nextVehicle.getY() + 10;
                     boolean accident = isThereAnAccident(posY,posY_Next,true);
-                    if(!accident && !youShallNotPass(posY))
+                    if(!accident || !youShallNotPass(posY))
                     {
                         v.setMoving(false);
                     }else{
@@ -197,7 +197,7 @@ public class Lane extends Thread {
                     MovingVehicle beforeMe = this.vehicles.get(i + 1);
                     int posY_BeforeMe = beforeMe.getY() - 10;
                     boolean accident = isThereAnAccident(posY_BeforeMe, posY_Me,false);
-                    if(!accident && !youShallNotPass(posY_Me))
+                    if(!accident || !youShallNotPass(posY_Me))
                     {
                         me.setMoving(false);
                     }else{
