@@ -77,6 +77,7 @@
          </children></AnchorPane>
     <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="200.0" minWidth="1900.0" prefHeight="200.0" prefWidth="1900.0" style="-fx-background-color: white;">
          <children>
+            <Button fx:id="ButtonChangeImages" layoutX="255.0" layoutY="157.0" mnemonicParsing="false" onAction="#changeVehicleImages" prefHeight="31.0" prefWidth="130.0" text="Change Image" />
             <TextField fx:id="txfNumberOfCars" layoutX="152.0" layoutY="157.0" prefHeight="17.0" prefWidth="78.0" />
             <Button fx:id="btnInitVehicles" layoutX="14.0" layoutY="157.0" mnemonicParsing="false" onAction="#initVehicles" prefHeight="31.0" prefWidth="130.0" text="Create" />
             <ImageView fx:id="imageCar" fitHeight="114.0" fitWidth="130.0" layoutX="14.0" layoutY="21.0" pickOnBounds="true" preserveRatio="true">
@@ -109,12 +110,7 @@
                   <Image url="@../Assets/traffic_light_green_icon.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="imageSimulation" fitHeight="177.0" fitWidth="150.0" layoutX="505.0" layoutY="25.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../../../../Downloads/Lenguajes/Progras/Progra%231/Images/start_icon.png" />
-               </image>
-            </ImageView>
-            <CheckBox fx:id="checkFigures" layoutX="256.0" layoutY="162.0" mnemonicParsing="false" prefHeight="21.0" prefWidth="103.0" text="Figures" />
+            <Button fx:id="ButtonSimulation" layoutX="395.0" layoutY="157.0" mnemonicParsing="false" onAction="#startSimulation" prefHeight="31.0" prefWidth="145.0" text="Simulation" />
          </children>
       </AnchorPane>
   </items>
