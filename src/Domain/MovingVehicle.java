@@ -55,43 +55,17 @@ public class MovingVehicle extends Vehicle {
     public void run() {
 
         ArrayList<Image> sprite = super.getSprite();
+
         super.setImage(sprite.get(getImgNum()));
-
-        /*while (this.running && this.isMoving())
-        {
-            try {
-                 {
-
-                    if(!this.isGoingDown()){
-                        if (this.getY() < 630)
-                        {
-                            super.setImage(sprite.get(getImgNum()));
-                            this.setY(getY() + 10);
-                            //System.out.println(" -DOWN- ");
-                        }
-                    }
-                    else{
-                        if (this.getY() > 0)
-                        {
-                            super.setImage(sprite.get(getImgNum()+3));
-                            this.setY(getY() - 10);
-                            //System.out.println(" -DOWN- ");
-                        }
-                    }
-                    Thread.sleep(speedThread);
-                }
-            }
-            catch (InterruptedException ex) {
-                System.err.println(ex);
-            }
-        }*/
 
         while (running)
         {
             try {
                 {
-                    if(this.isMoving()){
-                        if(this.isGoingDown()){
+                    if(this.isMoving())
+                    {
+                        if(this.isGoingDown())
+                        {
                             if ((this.getY()-80) < 630)
                             {
                                 super.setImage(sprite.get(getImgNum()));

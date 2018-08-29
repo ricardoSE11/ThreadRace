@@ -52,10 +52,15 @@ public class Controller {
     private Boolean goingDown;
 
     @FXML private TextField txfNumberOfCars;
+
     @FXML private Canvas canvasDibujo;
+
     @FXML private ImageView imageCar;
+
     @FXML private ImageView imageSpeedometer;
+
     @FXML private ImageView imageTrafficLigth;
+
     @FXML private ImageView imageBarrierOne;
     @FXML private ImageView imageBarrierTwo;
     @FXML private ImageView imageBarrierThree;
@@ -112,17 +117,17 @@ public class Controller {
         int barrierUp=365;
         int barrierBottom=370;
 
-        Lane laneOne = new Lane(145 , 235 , yTop , yBottom ,barrierUp , barrierBottom , goingDown , false );
-        Lane laneTwo = new Lane(285 , 365 , yTop , yBottom ,barrierUp , barrierBottom , goingDown , false );
-        Lane laneThree = new Lane(420 , 500 , yTop , yBottom ,barrierUp , barrierBottom , goingDown , false );
-        Lane laneFour = new Lane(555 , 635 , yTop , yBottom ,barrierUp , barrierBottom , goingDown , false );
-        Lane laneFive = new Lane(690 , 770 , yTop , yBottom ,barrierUp , barrierBottom , goingDown , false );
-        Lane laneSix = new Lane(828 , 908 , yTop , yBottom ,barrierUp , barrierBottom , goingDown , false );
-        Lane laneSeven = new Lane(962 , 1042 , yTop , yBottom ,barrierUp , barrierBottom , goingDown , false );
-        Lane laneEight = new Lane(1100 , 1180 , yTop , yBottom ,barrierUp , barrierBottom , goingDown , false );
-        Lane laneNine = new Lane(1235 , 1315 , yTop , yBottom ,barrierUp , barrierBottom , goingDown , false );
-        Lane laneTen = new Lane(1370 , 1450 , yTop , yBottom ,barrierUp , barrierBottom , goingDown , false );
-        Lane laneEleven = new Lane(1506 , 1586 , yTop , yBottom ,barrierUp , barrierBottom , goingDown , false );
+        Lane laneOne = new Lane(145 , 235 , yTop , yBottom ,barrierUp , barrierBottom , this.goingDown , false );
+        Lane laneTwo = new Lane(285 , 365 , yTop , yBottom ,barrierUp , barrierBottom , this.goingDown , false );
+        Lane laneThree = new Lane(420 , 500 , yTop , yBottom ,barrierUp , barrierBottom , this.goingDown , false );
+        Lane laneFour = new Lane(555 , 635 , yTop , yBottom ,barrierUp , barrierBottom , this.goingDown , false );
+        Lane laneFive = new Lane(690 , 770 , yTop , yBottom ,barrierUp , barrierBottom , this.goingDown , false );
+        Lane laneSix = new Lane(828 , 908 , yTop , yBottom ,barrierUp , barrierBottom , this.goingDown , false );
+        Lane laneSeven = new Lane(962 , 1042 , yTop , yBottom ,barrierUp , barrierBottom , this.goingDown , false );
+        Lane laneEight = new Lane(1100 , 1180 , yTop , yBottom ,barrierUp , barrierBottom , this.goingDown , false );
+        Lane laneNine = new Lane(1235 , 1315 , yTop , yBottom ,barrierUp , barrierBottom , this.goingDown , false );
+        Lane laneTen = new Lane(1370 , 1450 , yTop , yBottom ,barrierUp , barrierBottom , this.goingDown , false );
+        Lane laneEleven = new Lane(1506 , 1586 , yTop , yBottom ,barrierUp , barrierBottom , this.goingDown , false );
 
         this.lanes.add(laneOne);
         this.lanes.add(laneTwo);
@@ -140,22 +145,6 @@ public class Controller {
         {
             currentLane.start();
         }
-
-    }
-
-    public void prueba()
-    {
-        if (txfNumberOfCars.getText().toString().equals(""))
-            System.out.println("ME DOY CUENTA DE QUE ESTOY VACÍO YEIBOR");
-        System.out.println("Txf input: " + txfNumberOfCars.getText());
-        setUpSimulationGraphics();
-        vehicles.get(1).setMoving(false);
-        vehicles.get(0).setMoving(false);
-        vehicles.get(3).setMoving(false);
-        vehicles.get(7).setMoving(false);
-        vehicles.get(8).setMoving(false);
-        vehicles.get(5).setMoving(false);
-
 
     }
 
@@ -236,7 +225,8 @@ public class Controller {
         }
     }
 
-    public void insertVh_RandomLane(int speed, int howMany, Speeds vel) throws FileNotFoundException {
+    public void insertVh_RandomLane(int speed, int howMany, Speeds vel) throws FileNotFoundException
+    {
         if(this.goingDown){
             int i = 0;
             while(i < howMany){
@@ -252,46 +242,6 @@ public class Controller {
         }
     }
 
-    public void turnOnBarrier() throws InterruptedException
-    {
-        String laneNumbersString = txfNumberOfCars.getText().toString();
-        /*if(!areBarriersOn)
-        {
-            System.out.println("Attempting to pause Vehicle Threads");
-            if (laneNumbersString.equals(""))
-            {
-                //TODO: Pause all Threads.
-                areBarriersOn = true;
-
-                for (Vehicle currentVehicle : this.vehicles)
-                {
-                    while(areBarriersOn)
-                    {
-                        currentVehicle.wait();
-                    }
-                }
-            }
-
-            else{
-                //divide string and pause given lanes.
-            }
-        }
-
-        else{
-            System.out.println("LOG: Attempting to resume Vehicle Threads");
-            for (Vehicle currentVehicle : this.vehicles)
-            {
-                currentVehicle.wait();
-            }
-        }*/
-        vehicles.get(1).setMoving(true);
-        vehicles.get(0).setMoving(true);
-        vehicles.get(3).setMoving(true);
-        vehicles.get(7).setMoving(true);
-        vehicles.get(8).setMoving(true);
-        vehicles.get(5).setMoving(true);
-    }
-
     public void reDraw(Image backgroundImage)
     {
         canvasDibujo.setWidth(1900);
@@ -304,9 +254,11 @@ public class Controller {
         {
             for (MovingVehicle currentVehicle : currentLane.getVehicles())
             {
-                g.drawImage(currentVehicle.getImage() , currentVehicle.getX() , currentVehicle.getY());
+                if(currentVehicle.isRunning())
+                {
+                    g.drawImage(currentVehicle.getImage() , currentVehicle.getX() , currentVehicle.getY());
+                }
             }
-
         }
     }
 
@@ -321,10 +273,12 @@ public class Controller {
         }
     }
 
-    public void increaseSpeed(){
+    public void increaseSpeed()
+    {
 
         int new_position_tachomer = speed+1;
-        if(new_position_tachomer<3){
+        if(new_position_tachomer<3)
+        {
             speed=speed+1;
             Image imageSpeed = new Image("Assets/speedometer_icon_"+speed+".png");
             imageSpeedometer.setImage(imageSpeed);
@@ -336,7 +290,8 @@ public class Controller {
         }
     }
 
-    public void reduceSpeed(){
+    public void reduceSpeed()
+    {
 
         int new_position_tachomer = speed;
         if(new_position_tachomer>0){
@@ -351,12 +306,15 @@ public class Controller {
         }
     }
 
-    public void interruptVehicleMovement(){
+    public void interruptVehicleMovement()
+    {
 
-        if(trafficLigth){
+        if(trafficLigth)
+        {
             Image imageTrafficLigthRed = new Image("Assets/traffic_light_red_icon.png");
             imageTrafficLigth.setImage(imageTrafficLigthRed);
-            for (Lane currentLane : lanes) {
+            for (Lane currentLane : lanes)
+            {
                 currentLane.interruptVehicleMovement();
             }
             this.trafficLigth=!this.trafficLigth;
@@ -365,7 +323,8 @@ public class Controller {
 
             Image imageTrafficLigthGreen = new Image("Assets/traffic_light_green_icon.png");
             imageTrafficLigth.setImage(imageTrafficLigthGreen);
-            for (Lane currentLane : lanes) {
+            for (Lane currentLane : lanes)
+            {
                 currentLane.interruptVehicleMovement();
             }
             this.trafficLigth=!this.trafficLigth;
@@ -378,6 +337,7 @@ public class Controller {
         {
             Image imageBarrier = new Image("Assets/barrier_icon.png");
             imageBarrierOne.setImage(imageBarrier);
+            lanes.get(0).setWall(true);
             barrierOne=false;
         }
 
@@ -385,6 +345,7 @@ public class Controller {
         {
             Image imageBarrier = new Image("Assets/gray_icon.png");
             imageBarrierOne.setImage(imageBarrier);
+            lanes.get(0).setWall(false);
             barrierOne=true;
         }
     }
@@ -548,7 +509,5 @@ public class Controller {
             barrierEleven=true;
         }
     }
-
-
 
 }
