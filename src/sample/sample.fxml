@@ -77,10 +77,8 @@
          </children></AnchorPane>
     <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="200.0" minWidth="1900.0" prefHeight="200.0" prefWidth="1900.0" style="-fx-background-color: white;">
          <children>
-            <Button fx:id="btnPrueba" layoutX="576.0" layoutY="73.0" mnemonicParsing="false" onAction="#prueba" text="Prueba" />
             <TextField fx:id="txfNumberOfCars" layoutX="152.0" layoutY="157.0" prefHeight="17.0" prefWidth="78.0" />
             <Button fx:id="btnInitVehicles" layoutX="14.0" layoutY="157.0" mnemonicParsing="false" onAction="#initVehicles" prefHeight="31.0" prefWidth="130.0" text="Create" />
-            <Button fx:id="btnBarrier" layoutX="650.0" layoutY="73.0" mnemonicParsing="false" onAction="#turnOnBarrier" prefHeight="31.0" prefWidth="78.0" text="Barrier" />
             <ImageView fx:id="imageCar" fitHeight="114.0" fitWidth="130.0" layoutX="14.0" layoutY="21.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../Assets/car_icon_0.png" />

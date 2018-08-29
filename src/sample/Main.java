@@ -31,7 +31,6 @@ public class Main extends Application implements Runnable{
     public void start(Stage primaryStage) throws Exception{
         FXMLLoader loader = new FXMLLoader(getClass().getResource("sample.fxml"));
         Parent root = loader.load();
-        //Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
 
         myController = loader.getController();
         myController.init(primaryStage);
