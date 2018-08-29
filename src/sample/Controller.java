@@ -355,6 +355,7 @@ public class Controller {
         {
             Image imageBarrier = new Image("Assets/barrier_icon.png");
             imageBarrierTwo.setImage(imageBarrier);
+            lanes.get(1).setWall(true);
             barrierTwo=false;
         }
 
@@ -362,6 +363,7 @@ public class Controller {
         {
             Image imageBarrier = new Image("Assets/gray_icon.png");
             imageBarrierTwo.setImage(imageBarrier);
+            lanes.get(1).setWall(false);
             barrierTwo=true;
         }
     }
@@ -371,6 +373,7 @@ public class Controller {
         {
             Image imageBarrier = new Image("Assets/barrier_icon.png");
             imageBarrierThree.setImage(imageBarrier);
+            lanes.get(2).setWall(true);
             barrierThree=false;
         }
 
@@ -378,6 +381,7 @@ public class Controller {
         {
             Image imageBarrier = new Image("Assets/gray_icon.png");
             imageBarrierThree.setImage(imageBarrier);
+            lanes.get(2).setWall(false);
             barrierThree=true;
         }
     }
@@ -387,6 +391,7 @@ public class Controller {
         {
             Image imageBarrier = new Image("Assets/barrier_icon.png");
             imageBarrierFour.setImage(imageBarrier);
+            lanes.get(3).setWall(true);
             barrierFour=false;
         }
 
@@ -394,6 +399,7 @@ public class Controller {
         {
             Image imageBarrier = new Image("Assets/gray_icon.png");
             imageBarrierFour.setImage(imageBarrier);
+            lanes.get(3).setWall(false);
             barrierFour=true;
         }
     }
@@ -403,6 +409,7 @@ public class Controller {
         {
             Image imageBarrier = new Image("Assets/barrier_icon.png");
             imageBarrierFive.setImage(imageBarrier);
+            lanes.get(4).setWall(true);
             barrierFive=false;
         }
 
@@ -410,6 +417,7 @@ public class Controller {
         {
             Image imageBarrier = new Image("Assets/gray_icon.png");
             imageBarrierFive.setImage(imageBarrier);
+            lanes.get(4).setWall(false);
             barrierFive=true;
         }
     }
@@ -419,6 +427,7 @@ public class Controller {
         {
             Image imageBarrier = new Image("Assets/barrier_icon.png");
             imageBarrierSix.setImage(imageBarrier);
+            lanes.get(5).setWall(true);
             barrierSix=false;
         }
 
@@ -426,6 +435,7 @@ public class Controller {
         {
             Image imageBarrier = new Image("Assets/gray_icon.png");
             imageBarrierSix.setImage(imageBarrier);
+            lanes.get(5).setWall(false);
             barrierSix=true;
         }
     }
@@ -435,6 +445,7 @@ public class Controller {
         {
             Image imageBarrier = new Image("Assets/barrier_icon.png");
             imageBarrierSeven.setImage(imageBarrier);
+            lanes.get(6).setWall(true);
             barrierSeven=false;
         }
 
@@ -442,6 +453,7 @@ public class Controller {
         {
             Image imageBarrier = new Image("Assets/gray_icon.png");
             imageBarrierSeven.setImage(imageBarrier);
+            lanes.get(6).setWall(false);
             barrierSeven=true;
         }
     }
@@ -451,6 +463,7 @@ public class Controller {
         {
             Image imageBarrier = new Image("Assets/barrier_icon.png");
             imageBarrierEight.setImage(imageBarrier);
+            lanes.get(7).setWall(true);
             barrierEight=false;
         }
 
@@ -458,6 +471,7 @@ public class Controller {
         {
             Image imageBarrier = new Image("Assets/gray_icon.png");
             imageBarrierEight.setImage(imageBarrier);
+            lanes.get(7).setWall(false);
             barrierEight=true;
         }
     }
@@ -467,6 +481,7 @@ public class Controller {
         {
             Image imageBarrier = new Image("Assets/barrier_icon.png");
             imageBarrierNine.setImage(imageBarrier);
+            lanes.get(8).setWall(true);
             barrierNine=false;
         }
 
@@ -474,6 +489,7 @@ public class Controller {
         {
             Image imageBarrier = new Image("Assets/gray_icon.png");
             imageBarrierNine.setImage(imageBarrier);
+            lanes.get(8).setWall(false);
             barrierNine=true;
         }
     }
@@ -483,6 +499,7 @@ public class Controller {
         {
             Image imageBarrier = new Image("Assets/barrier_icon.png");
             imageBarrierTen.setImage(imageBarrier);
+            lanes.get(9).setWall(false);
             barrierTen=false;
         }
 
@@ -490,6 +507,7 @@ public class Controller {
         {
             Image imageBarrier = new Image("Assets/gray_icon.png");
             imageBarrierTen.setImage(imageBarrier);
+            lanes.get(9).setWall(false);
             barrierTen=true;
         }
     }
@@ -499,6 +517,7 @@ public class Controller {
         {
             Image imageBarrier = new Image("Assets/barrier_icon.png");
             imageBarrierEleven.setImage(imageBarrier);
+            lanes.get(10).setWall(true);
             barrierEleven=false;
         }
 
@@ -506,6 +525,7 @@ public class Controller {
         {
             Image imageBarrier = new Image("Assets/gray_icon.png");
             imageBarrierEleven.setImage(imageBarrier);
+            lanes.get(10).setWall(false);
             barrierEleven=true;
         }
     }
