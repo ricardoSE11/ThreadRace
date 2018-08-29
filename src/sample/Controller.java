@@ -15,6 +15,7 @@ import javafx.stage.Stage;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 
 
@@ -41,6 +42,7 @@ public class Controller {
     private boolean barrierNine = false;
     private boolean barrierTen = false;
     private boolean barrierEleven = false;
+    private Random aleatorio;
 
     //UI
     private Stage stage;
@@ -80,6 +82,7 @@ public class Controller {
         areBarriersOn = false;
         goingDown = false;
         trafficLigth= true;
+        aleatorio = new Random(System.currentTimeMillis());
 
         this.stage = stage;
 
@@ -164,35 +167,66 @@ public class Controller {
         int number = Integer.parseInt(txfNumberOfCars.getText());
         Speeds vel;
         int y = 45;
-        for(int i = 0 ; i<number ; i++){
-            Random aleatorio = new Random(System.currentTimeMillis());
+        switch (speed){
+            case 0 :
+                vel=Speeds.SLOW;
+                if (number  == 1) {
+                    insertVh_LessCharged(vel);
+                }
+                else
+                {
+                    insertVh_RandomLane(speed,number,y,vel);
+                }
+                break;
+            case 1 :
+                vel=Speeds.MEDIUM;
+                if (number  == 1) {
+                    insertVh_LessCharged(vel);
+                }
+                else
+                {
+                    insertVh_RandomLane(speed,number,y,vel);
+                }
+                break;
+            case 2 :
+                vel=Speeds.FAST;
+                if (number  == 1) {
+                    insertVh_LessCharged(vel);
+                }
+                else
+                {
+                    insertVh_RandomLane(speed,number,y,vel);
+                }
+                break;
+        }
+    }
+
+    public void insertVh_LessCharged(Speeds vel) throws FileNotFoundException {
+        ArrayList<Integer> vehiclesByLane = new ArrayList<>();
+        for(int i = 0; i < lanes.size(); i++){
+            vehiclesByLane.add(lanes.get(i).getVehicles().size());
+        }
+        System.out.println("InsertVc");
+        int minIndex = vehiclesByLane.indexOf(Collections.min(vehiclesByLane));
+        MovingVehicle jc0 = new MovingVehicle(lanes.get(minIndex).getxLeft(), 0, speed , true , false , vel , true);
+        lanes.get(minIndex).addVehicle(jc0);
+        vehicles.add(jc0);
+        jc0.start();
+    }
+
+    public void insertVh_RandomLane(int speed, int howMany, int y , Speeds vel) throws FileNotFoundException {
+        int i = 0;
+        while(i < howMany){
+            System.out.println("InsertVh_RandomLane");
             int intAletorio = aleatorio.nextInt(11);
-            aleatorio.setSeed(System.currentTimeMillis());
             int x =lanes.get(intAletorio).getxLeft();
-            switch (speed){
-                case 0 :
-                    vel=Speeds.SLOW;
-                    MovingVehicle jc0 = new MovingVehicle(x, y, speed , true , false , vel);
-                    lanes.get(intAletorio).getVehicles().add(jc0);
-                    vehicles.add(jc0);
-                    jc0.start();
-                    break;
-                case 1 :
-                    vel=Speeds.MEDIUM;
-                    MovingVehicle jc1 = new MovingVehicle(x, y, speed , true , false , vel);
-                    lanes.get(intAletorio).getVehicles().add(jc1);
-                    vehicles.add(jc1);
-                    jc1.start();
-                    break;
-                case 2 :
-                    vel=Speeds.FAST;
-                    MovingVehicle jc2 = new MovingVehicle(x, y, speed , true , false , vel);
-                    lanes.get(intAletorio).getVehicles().add(jc2);
-                    vehicles.add(jc2);
-                    jc2.start();
-                    break;
-            }
-            x+=140;
+            aleatorio.setSeed(System.currentTimeMillis());
+            Lane temp = this.lanes.get(intAletorio);
+            MovingVehicle jc0 = new MovingVehicle(x, y, speed , true , false , vel , true);
+            temp.addVehicle(jc0);
+            vehicles.add(jc0);
+            jc0.start();
+            i += 1;
         }
     }
 
@@ -301,10 +335,8 @@ public class Controller {
             imageTrafficLigth.setImage(imageTrafficLigthRed);
             for (Lane currentLane : lanes) {
                 currentLane.interruptVehicleMovement();
-                //System.out.println("set Moving false");
             }
             trafficLigth=false;
-            //System.out.println("Is Moving false");
         }
         else{
 
@@ -312,10 +344,8 @@ public class Controller {
             imageTrafficLigth.setImage(imageTrafficLigthGreen);
             for (Lane currentLane : lanes) {
                 currentLane.interruptVehicleMovement();
-                //System.out.println("set Moving false");
             }
             trafficLigth=true;
-            //System.out.println("Is Moving true");
         }
     }
 
