@@ -11,6 +11,7 @@ public class MovingVehicle extends Vehicle {
 
     private int speedThread;
     private boolean running;
+    private boolean figureImage;
 
 
     public MovingVehicle(int x, int y, int imgNum , boolean isMoving , boolean isGoingDown, Speeds speed , Boolean running) throws FileNotFoundException {
@@ -18,6 +19,7 @@ public class MovingVehicle extends Vehicle {
         System.out.println("Vehicle with: " + x + " , " + y);
         this.running = running;
         setSprite();
+        this.figureImage = false;
         switch (this.getSpeed()){
             case SLOW:
                 speedThread=100;
@@ -32,6 +34,15 @@ public class MovingVehicle extends Vehicle {
                 break;
         }
 
+    }
+
+
+    public boolean isFigureImage() {
+        return figureImage;
+    }
+
+    public void setFigureImage(boolean figureImage) {
+        this.figureImage = figureImage;
     }
 
     public boolean isRunning() {
@@ -50,6 +61,14 @@ public class MovingVehicle extends Vehicle {
         sprite.add(new Image(new FileInputStream("src/Assets/car_icon_6.png")));
         sprite.add(new Image(new FileInputStream("src/Assets/car_icon_7.png")));
         sprite.add(new Image(new FileInputStream("src/Assets/car_icon_8.png")));
+        sprite.add(new Image(new FileInputStream("src/Assets/matrix_icon_1.png")));
+        sprite.add(new Image(new FileInputStream("src/Assets/matrix_icon_2.png")));
+        sprite.add(new Image(new FileInputStream("src/Assets/matrix_icon_3.png")));
+        sprite.add(new Image(new FileInputStream("src/Assets/matrix_icon_4.png")));
+        sprite.add(new Image(new FileInputStream("src/Assets/bullbasaur_icon.png")));
+        sprite.add(new Image(new FileInputStream("src/Assets/charmander_icon.png")));
+        sprite.add(new Image(new FileInputStream("src/Assets/pikachu_icon.png")));
+
     }
 
     @Override
@@ -69,7 +88,12 @@ public class MovingVehicle extends Vehicle {
                         {
                             if ((this.getY()-80) < 630)
                             {
-                                super.setImage(sprite.get(getImgNum()));
+                                if (this.figureImage){
+                                    super.setImage(sprite.get(getImgNum()+6));
+                                }
+                                else{
+                                    super.setImage(sprite.get(getImgNum()));
+                                }
                                 this.setY(getY() + 10);
                                 //System.out.println(" -DOWN- ");
                             }
@@ -77,7 +101,12 @@ public class MovingVehicle extends Vehicle {
                         else{
                             if (this.getY() > 0)
                             {
-                                super.setImage(sprite.get(getImgNum()+3));
+                                if (this.figureImage){
+                                    super.setImage(sprite.get(getImgNum()+6));
+                                }
+                                else{
+                                    super.setImage(sprite.get(getImgNum()+3));
+                                }
                                 this.setY(getY() - 10);
                                 //System.out.println(" -DOWN- ");
                             }

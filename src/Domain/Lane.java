@@ -22,7 +22,7 @@ public class Lane extends Thread {
 
 
     public Lane(int xLeft, int xRight, int yTop, int yBottom,
-                int positionBarrierUp, int positionBarrierBottom , boolean goingDown) {
+                int positionBarrierUp, int positionBarrierBottom , boolean goingDown , boolean wall) {
 
         this.vehicles = new ArrayList<>();
         this.xLeft = xLeft;
@@ -32,7 +32,7 @@ public class Lane extends Thread {
         this.positionBarrierUp = positionBarrierUp;
         this.positionBarrierBottom = positionBarrierBottom;
         this.goingDown = goingDown;
-        this.wall=true;
+        this.wall=wall;
         this.queueVehicles = new LinkedList<>();
         this.running = true;
         this.pause = true;

@@ -7,6 +7,7 @@ import Utility.Speeds;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -18,6 +19,10 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.*;
 
 
 public class Controller {
@@ -44,12 +49,14 @@ public class Controller {
     private boolean barrierTen;
     private boolean barrierEleven;
     private Random aleatorio;
+    private boolean cancelSimulation;
 
     //UI
     private Stage stage;
     private GraphicsContext g;
     private Image bgImage;
     private Boolean goingDown;
+    private Boolean changeImage;
 
     @FXML private TextField txfNumberOfCars;
 
@@ -73,6 +80,8 @@ public class Controller {
     @FXML private ImageView imageBarrierTen;
     @FXML private ImageView imageBarrierEleven;
 
+    @FXML private CheckBox checkFigures;
+
 
 
     public Controller()
@@ -86,6 +95,9 @@ public class Controller {
         this.vehicles = new ArrayList<>();
         this.lanes = new ArrayList<>();
         this.areBarriersOn = false;
+        this.changeImage = false;
+
+        this.cancelSimulation = true;
 
         this.goingDown = true;
 
@@ -106,10 +118,10 @@ public class Controller {
         this.aleatorio = new Random(System.currentTimeMillis());
         this.stage = stage;
 
-        initiLanes();
+        initiLanes(true);
     }
 
-    public void initiLanes()
+    public void initiLanes(boolean wall)
     {
         System.out.println("Created Lanes ArrayList");
         int yTop = 0;
@@ -117,17 +129,17 @@ public class Controller {
         int barrierUp=365;
         int barrierBottom=370;
 
-        Lane laneOne = new Lane(145 , 235 , yTop , yBottom ,barrierUp , barrierBottom , this.goingDown);
-        Lane laneTwo = new Lane(285 , 365 , yTop , yBottom ,barrierUp , barrierBottom , this.goingDown);
-        Lane laneThree = new Lane(420 , 500 , yTop , yBottom ,barrierUp , barrierBottom , this.goingDown);
-        Lane laneFour = new Lane(555 , 635 , yTop , yBottom ,barrierUp , barrierBottom , this.goingDown);
-        Lane laneFive = new Lane(690 , 770 , yTop , yBottom ,barrierUp , barrierBottom , this.goingDown);
-        Lane laneSix = new Lane(828 , 908 , yTop , yBottom ,barrierUp , barrierBottom , this.goingDown);
-        Lane laneSeven = new Lane(962 , 1042 , yTop , yBottom ,barrierUp , barrierBottom , this.goingDown);
-        Lane laneEight = new Lane(1100 , 1180 , yTop , yBottom ,barrierUp , barrierBottom , this.goingDown);
-        Lane laneNine = new Lane(1235 , 1315 , yTop , yBottom ,barrierUp , barrierBottom , this.goingDown);
-        Lane laneTen = new Lane(1370 , 1450 , yTop , yBottom ,barrierUp , barrierBottom , this.goingDown);
-        Lane laneEleven = new Lane(1506 , 1586 , yTop , yBottom ,barrierUp , barrierBottom , this.goingDown);
+        Lane laneOne = new Lane(145 , 235 , yTop , yBottom ,barrierUp , barrierBottom , this.goingDown, wall);
+        Lane laneTwo = new Lane(285 , 365 , yTop , yBottom ,barrierUp , barrierBottom , this.goingDown,wall);
+        Lane laneThree = new Lane(420 , 500 , yTop , yBottom ,barrierUp , barrierBottom , this.goingDown,wall);
+        Lane laneFour = new Lane(555 , 635 , yTop , yBottom ,barrierUp , barrierBottom , this.goingDown,wall);
+        Lane laneFive = new Lane(690 , 770 , yTop , yBottom ,barrierUp , barrierBottom , this.goingDown,wall);
+        Lane laneSix = new Lane(828 , 908 , yTop , yBottom ,barrierUp , barrierBottom , this.goingDown,wall);
+        Lane laneSeven = new Lane(962 , 1042 , yTop , yBottom ,barrierUp , barrierBottom , this.goingDown,wall);
+        Lane laneEight = new Lane(1100 , 1180 , yTop , yBottom ,barrierUp , barrierBottom , this.goingDown,wall);
+        Lane laneNine = new Lane(1235 , 1315 , yTop , yBottom ,barrierUp , barrierBottom , this.goingDown,wall);
+        Lane laneTen = new Lane(1370 , 1450 , yTop , yBottom ,barrierUp , barrierBottom , this.goingDown,wall);
+        Lane laneEleven = new Lane(1506 , 1586 , yTop , yBottom ,barrierUp , barrierBottom , this.goingDown,wall);
 
         this.lanes.add(laneOne);
         this.lanes.add(laneTwo);
@@ -254,6 +266,126 @@ public class Controller {
         }
     }
 
+    public void setImageSimulation()
+    {
+        Image imageBarrier = new Image("Assets/gray_icon.png");
+        imageBarrierOne.setImage(imageBarrier);
+        imageBarrierTwo.setImage(imageBarrier);
+        imageBarrierThree.setImage(imageBarrier);
+        imageBarrierFour.setImage(imageBarrier);
+        imageBarrierFive.setImage(imageBarrier);
+        imageBarrierSix.setImage(imageBarrier);
+        imageBarrierSeven.setImage(imageBarrier);
+        imageBarrierEight.setImage(imageBarrier);
+        imageBarrierNine.setImage(imageBarrier);
+        imageBarrierTen.setImage(imageBarrier);
+        imageBarrierEleven.setImage(imageBarrier);
+
+    }
+    public void startSimulation() throws FileNotFoundException
+    {
+        this.cancelSimulation=!this.cancelSimulation;
+        lanes = new ArrayList<>();
+        initiLanes(false);
+        setImageSimulation();
+        this.goingDown = true;
+        this.pause = true;
+        aleatorio = new Random(System.currentTimeMillis());
+
+        int randomTime = ThreadLocalRandom.current().nextInt(1, 3 + 1);;
+
+        TimerTask repeatedTask = new TimerTask()
+        {
+            public void run()
+            {
+
+                if (cancelSimulation)
+                    cancel();
+
+                int numberOfVehicles = ThreadLocalRandom.current().nextInt(1, 7 + 1);;
+                int randomSpeed = ThreadLocalRandom.current().nextInt(0, 2 + 1);;
+                Speeds speed;
+
+                try
+                {
+                    switch (randomSpeed)
+                    {
+                        case 0:
+                            speed = Speeds.SLOW;
+                            if (numberOfVehicles == 1) {
+                                insertVh_LessCharged(speed);
+                            } else {
+                                insertVh_RandomLane(randomSpeed, numberOfVehicles, speed);
+                            }
+                            break;
+
+                        case 1:
+                            speed = Speeds.MEDIUM;
+                            if (numberOfVehicles == 1) {
+                                insertVh_LessCharged(speed);
+                            } else {
+                                insertVh_RandomLane(randomSpeed, numberOfVehicles, speed);
+                            }
+                            break;
+
+                        case 2:
+                            speed = Speeds.FAST;
+                            if (numberOfVehicles == 1) {
+                                insertVh_LessCharged(speed);
+                            } else {
+                                insertVh_RandomLane(randomSpeed, numberOfVehicles, speed);
+                            }
+                            break;
+                    }
+                }
+                catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+
+
+                System.out.println("Num Vehiculos: " + numberOfVehicles);
+                System.out.println("SPEED : " + randomSpeed);
+
+            }
+
+        };
+
+        Timer timer = new Timer("Timer");
+
+        long delay  = 0;
+        long period = randomTime * 1000L;
+        timer.scheduleAtFixedRate(repeatedTask, delay, period);
+
+    }
+
+    public void initVehicles(int speed) throws FileNotFoundException
+    {
+        Speeds vel;
+        switch (speed){
+            case 0 :
+                vel=Speeds.SLOW;
+                if (speed  == 1) {
+                    insertVh_LessCharged(vel);
+                }
+                break;
+            case 1 :
+                vel=Speeds.MEDIUM;
+                if (speed  == 1) {
+                    insertVh_LessCharged(vel);
+                }
+                break;
+            case 2 :
+                vel=Speeds.FAST;
+                if (speed  == 1) {
+                    insertVh_LessCharged(vel);
+                }
+                break;
+        }
+    }
+
+
+
+
     public void reDraw(Image backgroundImage)
     {
         canvasDibujo.setWidth(1900);
@@ -319,12 +451,32 @@ public class Controller {
         }
     }
 
-    public void startSimulation()
-    {
 
+    public void changeVehicleImages()
+    {
+        if(this.changeImage){
+            for (Lane currentLines:lanes)
+            {
+                for (MovingVehicle currentVehicle:currentLines.getVehicles())
+                {
+                    currentVehicle.setFigureImage(false);
+                }
+            }
+            this.changeImage = false;
+        }
+        else
+        {
+            for (Lane currentLines:lanes)
+            {
+                for (MovingVehicle currentVehicle:currentLines.getVehicles())
+                {
+                    currentVehicle.setFigureImage(true);
+                }
+            }
+            this.changeImage = true;
+        }
 
     }
-
     public void interruptVehicleMovement()
     {
         if(this.pause){
