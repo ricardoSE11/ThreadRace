@@ -10,7 +10,7 @@ import javafx.scene.image.Image;
 public class MovingVehicle extends Vehicle {
 
     private int speedThread;
-    public boolean running;
+    private boolean running;
 
 
     public MovingVehicle(int x, int y, int imgNum , boolean isMoving , boolean isGoingDown, Speeds speed , Boolean running) throws FileNotFoundException {
@@ -32,7 +32,15 @@ public class MovingVehicle extends Vehicle {
         }
 
     }
-    
+
+    public boolean isRunning() {
+        return running;
+    }
+
+    public void setRunning(boolean running) {
+        this.running = running;
+    }
+
     public void setSprite() throws FileNotFoundException{
         ArrayList<Image> sprite = super.getSprite();
         sprite.add(new Image(new FileInputStream("src/Assets/car_icon_0.png")));
@@ -49,7 +57,8 @@ public class MovingVehicle extends Vehicle {
         ArrayList<Image> sprite = super.getSprite();
         super.setImage(sprite.get(getImgNum()));
 
-        while (this.running && this.isMoving()) {
+        /*while (this.running && this.isMoving())
+        {
             try {
                  {
 
@@ -67,6 +76,36 @@ public class MovingVehicle extends Vehicle {
                             super.setImage(sprite.get(getImgNum()+3));
                             this.setY(getY() - 10);
                             //System.out.println(" -DOWN- ");
+                        }
+                    }
+                    Thread.sleep(speedThread);
+                }
+            }
+            catch (InterruptedException ex) {
+                System.err.println(ex);
+            }
+        }*/
+
+        while (running)
+        {
+            try {
+                {
+                    if(this.isMoving()){
+                        if(!this.isGoingDown()){
+                            if ((this.getY()-66) < 630)
+                            {
+                                super.setImage(sprite.get(getImgNum()));
+                                this.setY(getY() + 10);
+                                //System.out.println(" -DOWN- ");
+                            }
+                        }
+                        else{
+                            if (this.getY() > 0)
+                            {
+                                super.setImage(sprite.get(getImgNum()+3));
+                                this.setY(getY() - 10);
+                                //System.out.println(" -DOWN- ");
+                            }
                         }
                     }
                     Thread.sleep(speedThread);

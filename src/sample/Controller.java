@@ -121,6 +121,11 @@ public class Controller {
         this.lanes.add(laneTen);
         this.lanes.add(laneEleven);
 
+        for (Lane currentLane:lanes)
+        {
+            currentLane.start();
+        }
+
     }
 
     public void prueba()
@@ -166,7 +171,7 @@ public class Controller {
     {
         int number = Integer.parseInt(txfNumberOfCars.getText());
         Speeds vel;
-        int y = 45;
+        int y = 0;
         switch (speed){
             case 0 :
                 vel=Speeds.SLOW;
