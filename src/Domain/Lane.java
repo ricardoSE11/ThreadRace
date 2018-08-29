@@ -1,5 +1,6 @@
 package Domain;
 
+import sun.awt.windows.ThemeReader;
 import sun.security.provider.MD4;
 
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ public class Lane extends Thread {
     private boolean goingDown;
     private boolean trafficLightRed;
     private boolean wall;
+    private boolean running;
     private Queue<MovingVehicle> queueVehicles;
 
 
@@ -35,6 +37,7 @@ public class Lane extends Thread {
         this.trafficLightRed = trafficLightRed;
         this.wall=false;
         this.queueVehicles = new LinkedList<>();
+        this.running = true;
     }
 
     public boolean isWall() {
@@ -145,65 +148,54 @@ public class Lane extends Thread {
 
     public void interruptVehicleMovement()
     {
-        if(trafficLightRed){
-
-            for (MovingVehicle currentVehicle:vehicles) {
-                currentVehicle.running=true;
-                //System.out.println("set Moving false");
-            }
-            trafficLightRed =false;
-            //System.out.println("Is Moving false");
-
-        }
-
-        else{
-            for (MovingVehicle currentVehicle:vehicles) {
-                currentVehicle.running=false;
-                //System.out.println("set Moving true");
-            }
-            trafficLightRed =true;
-            //System.out.println("Is Moving true");
+        this.trafficLightRed=!this.trafficLightRed;
+        for (MovingVehicle currentVehicle:vehicles) {
+            currentVehicle.setMoving(!this.trafficLightRed);
+            //System.out.println("set Moving false");
         }
     }
 
     public void verifyMovement(){
+
         if(goingDown){
             for(int i = 0; i < this.vehicles.size(); i++){
                 MovingVehicle v = this.vehicles.get(i);
                 int posY = (int)v.getY() + 10;//next iteration
                 if(i == 0){
-                    if(!youShallNotPass(posY)){
+                    /*if(!youShallNotPass(posY)){
                         v.setMoving(false);
                     }else{
                         v.setMoving(true);
-                    }
+                    }*/
                 }else{
                     MovingVehicle nextVehicle = this.vehicles.get(i-1);
                     int posY_Next = (int) nextVehicle.getY() + 10;
-                    boolean accident = isThereAnAccident(posY,posY_Next,true);
-                    if(accident && !youShallNotPass(posY)){
+                    boolean accident = isThereAnAccident(posY_Next,posY,true);
+                    if(accident/* && !youShallNotPass(posY)*/){
                         v.setMoving(false);
                     }else{
                         v.setMoving(true);
                     }
                 }
             }
-        }else{
+        }
+        else
+            {
             int last = this.vehicles.size()-1;
             for(int i = 0; i < this.vehicles.size(); i++){
                 MovingVehicle v = this.vehicles.get(i);
                 int posY = (int)v.getY() + 10;//next iteration
                 if(i == last){
-                    if(!youShallNotPass(posY)){
+                    /*if(!youShallNotPass(posY)){
                         v.setMoving(false);
                     }else{
                         v.setMoving(true);
-                    }
+                    }*/
                 }else{
                     MovingVehicle nextVehicle = this.vehicles.get(i+1);
-                    int posY_Next = (int) nextVehicle.getY() + 10;
-                    boolean accident = isThereAnAccident(posY,posY_Next,false);
-                    if(accident && !youShallNotPass(posY)){
+                    int posY_Next = (int) nextVehicle.getY() - 10;
+                    boolean accident = isThereAnAccident(posY_Next,posY,false);
+                    if(accident /*&& !youShallNotPass(posY)*/){
                         v.setMoving(false);
                     }else{
                         v.setMoving(true);
@@ -213,14 +205,15 @@ public class Lane extends Thread {
         }
     }
     public boolean isThereAnAccident(int posY_VehicleOne, int posY_VehicleTwo, boolean direction){
+
         if(direction){
-            if((posY_VehicleTwo + 64) - (posY_VehicleOne - 64) < 0){
+            if((posY_VehicleOne - 66) - (posY_VehicleTwo + 66) < 0){
                 return true;
             }else{
                 return false;
             }
         }else{
-            if((posY_VehicleTwo - 64) - (posY_VehicleOne + 64) < 0){
+            if((posY_VehicleTwo - 66) - (posY_VehicleOne + 66) < 0){
                 return true;
             }else{
                 return false;
@@ -242,20 +235,22 @@ public class Lane extends Thread {
     }
 
     public void deleteFirstVehicle(){
+
         if(!this.vehicles.isEmpty()){
-            Vehicle temp = this.vehicles.get(0);
+            MovingVehicle temp = this.vehicles.get(0);
             int posY_FirstVehicle = (int)temp.getY() - 64;
-            if(posY_FirstVehicle > 600){
-                temp.setMoving(false);
+            if((posY_FirstVehicle+66) > 630){
+                ((MovingVehicle) temp).setRunning(false);
                 this.vehicles.remove(0);
             }
         }
+
     }
 
     public int getPosY_LastVehicle(){
         int last_Vehicle = this.vehicles.size() - 1;
         Vehicle temp = this.vehicles.get(last_Vehicle);
-        int posY_LastVehicle = (int)temp.getY() - 64;
+        int posY_LastVehicle = (int)temp.getY();
         return posY_LastVehicle;
     }
 
@@ -267,7 +262,7 @@ public class Lane extends Thread {
         v.setX(this.xLeft);
         if(!this.vehicles.isEmpty()){
             int posY_LastVehicle = getPosY_LastVehicle();
-            if((posY_LastVehicle-64) < 64){//I suppose this is the min posY of a vehicle
+            if((posY_LastVehicle-66) < 66){//I suppose this is the min posY of a vehicle
                 v.setMoving(false);
                 this.queueVehicles.add(v);
             }else{
@@ -286,8 +281,8 @@ public class Lane extends Thread {
 
         if(!this.queueVehicles.isEmpty()){
             int posY_LastVehicle = getPosY_LastVehicle();
-            if((posY_LastVehicle-64) > 64){
-                Vehicle v = this.queueVehicles.poll();
+            if((posY_LastVehicle-66) > 66){
+                MovingVehicle v = this.queueVehicles.poll();
                 v.setMoving(true);
                 v.setGoingDown(goingDown);
             }
@@ -296,6 +291,15 @@ public class Lane extends Thread {
     //Here we validate vehicle movement
     @Override
     public void run() {
-
+        while (running){
+            try {
+                verifyMovement();
+                checkQueue();
+                deleteFirstVehicle();
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
