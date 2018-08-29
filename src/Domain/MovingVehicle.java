@@ -15,6 +15,7 @@ public class MovingVehicle extends Vehicle {
 
     public MovingVehicle(int x, int y, int imgNum , boolean isMoving , boolean isGoingDown, Speeds speed , Boolean running) throws FileNotFoundException {
         super(x, y, imgNum , isMoving , isGoingDown , speed);
+        System.out.println("Vehicle with: " + x + " , " + y);
         this.running = running;
         setSprite();
         switch (this.getSpeed()){

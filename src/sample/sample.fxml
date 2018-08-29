@@ -109,6 +109,12 @@
                   <Image url="@../Assets/traffic_light_green_icon.png" />
                </image>
             </ImageView>
+            <ImageView fx:id="imageSimulation" fitHeight="177.0" fitWidth="150.0" layoutX="505.0" layoutY="25.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../../Downloads/Lenguajes/Progras/Progra%231/Images/start_icon.png" />
+               </image>
+            </ImageView>
+            <CheckBox fx:id="checkFigures" layoutX="256.0" layoutY="162.0" mnemonicParsing="false" prefHeight="21.0" prefWidth="103.0" text="Figures" />
          </children>
       </AnchorPane>
   </items>
