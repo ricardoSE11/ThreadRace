@@ -52,7 +52,7 @@ public class Vehicle extends Thread{
     }
 
     public void setGoingDown(boolean goingDown) {
-        isGoingDown = goingDown;
+        this.isGoingDown = goingDown;
     }
 
     public Vehicle() {

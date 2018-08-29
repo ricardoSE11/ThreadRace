@@ -12,6 +12,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
+import javax.swing.*;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -31,17 +32,17 @@ public class Controller {
 
     //Vars GUI
     private int speed=0;
-    private boolean barrierOne = false;
-    private boolean barrierTwo = false;
-    private boolean barrierThree = false;
-    private boolean barrierFour = false;
-    private boolean barrierFive = false;
-    private boolean barrierSix = false;
-    private boolean barrierSeven = false;
-    private boolean barrierEight = false;
-    private boolean barrierNine = false;
-    private boolean barrierTen = false;
-    private boolean barrierEleven = false;
+    private boolean barrierOne;
+    private boolean barrierTwo;
+    private boolean barrierThree;
+    private boolean barrierFour;
+    private boolean barrierFive;
+    private boolean barrierSix;
+    private boolean barrierSeven;
+    private boolean barrierEight;
+    private boolean barrierNine;
+    private boolean barrierTen;
+    private boolean barrierEleven;
     private Random aleatorio;
 
     //UI
@@ -77,13 +78,27 @@ public class Controller {
 
     public void init(Stage stage)
     {
-        vehicles = new ArrayList<>();
-        lanes = new ArrayList<>();
-        areBarriersOn = false;
-        goingDown = false;
-        trafficLigth= true;
-        aleatorio = new Random(System.currentTimeMillis());
+        this.vehicles = new ArrayList<>();
+        this.lanes = new ArrayList<>();
+        this.areBarriersOn = false;
 
+        this.goingDown = true;
+
+        barrierOne = false;
+        barrierTwo = false;
+        barrierThree = false;
+        barrierFour = false;
+        barrierFive = false;
+        barrierSix = false;
+        barrierSeven = false;
+        barrierEight = false;
+        barrierNine = false;
+        barrierTen = false;
+        barrierEleven = false;
+
+        this.trafficLigth= true;
+
+        this.aleatorio = new Random(System.currentTimeMillis());
         this.stage = stage;
 
         initiLanes();
@@ -97,17 +112,17 @@ public class Controller {
         int barrierUp=365;
         int barrierBottom=370;
 
-        Lane laneOne = new Lane(145 , 235 , yTop , yBottom ,barrierUp , barrierBottom , true , false );
-        Lane laneTwo = new Lane(285 , 365 , yTop , yBottom ,barrierUp , barrierBottom , true , false );
-        Lane laneThree = new Lane(420 , 500 , yTop , yBottom ,barrierUp , barrierBottom , true , false );
-        Lane laneFour = new Lane(555 , 635 , yTop , yBottom ,barrierUp , barrierBottom , true , false );
-        Lane laneFive = new Lane(690 , 770 , yTop , yBottom ,barrierUp , barrierBottom , true , false );
-        Lane laneSix = new Lane(828 , 908 , yTop , yBottom ,barrierUp , barrierBottom , true , false );
-        Lane laneSeven = new Lane(962 , 1042 , yTop , yBottom ,barrierUp , barrierBottom , true , false );
-        Lane laneEight = new Lane(1100 , 1180 , yTop , yBottom ,barrierUp , barrierBottom , true , false );
-        Lane laneNine = new Lane(1235 , 1315 , yTop , yBottom ,barrierUp , barrierBottom , true , false );
-        Lane laneTen = new Lane(1370 , 1450 , yTop , yBottom ,barrierUp , barrierBottom , true , false );
-        Lane laneEleven = new Lane(1506 , 1586 , yTop , yBottom ,barrierUp , barrierBottom , true , false );
+        Lane laneOne = new Lane(145 , 235 , yTop , yBottom ,barrierUp , barrierBottom , goingDown , false );
+        Lane laneTwo = new Lane(285 , 365 , yTop , yBottom ,barrierUp , barrierBottom , goingDown , false );
+        Lane laneThree = new Lane(420 , 500 , yTop , yBottom ,barrierUp , barrierBottom , goingDown , false );
+        Lane laneFour = new Lane(555 , 635 , yTop , yBottom ,barrierUp , barrierBottom , goingDown , false );
+        Lane laneFive = new Lane(690 , 770 , yTop , yBottom ,barrierUp , barrierBottom , goingDown , false );
+        Lane laneSix = new Lane(828 , 908 , yTop , yBottom ,barrierUp , barrierBottom , goingDown , false );
+        Lane laneSeven = new Lane(962 , 1042 , yTop , yBottom ,barrierUp , barrierBottom , goingDown , false );
+        Lane laneEight = new Lane(1100 , 1180 , yTop , yBottom ,barrierUp , barrierBottom , goingDown , false );
+        Lane laneNine = new Lane(1235 , 1315 , yTop , yBottom ,barrierUp , barrierBottom , goingDown , false );
+        Lane laneTen = new Lane(1370 , 1450 , yTop , yBottom ,barrierUp , barrierBottom , goingDown , false );
+        Lane laneEleven = new Lane(1506 , 1586 , yTop , yBottom ,barrierUp , barrierBottom , goingDown , false );
 
         this.lanes.add(laneOne);
         this.lanes.add(laneTwo);
@@ -121,7 +136,7 @@ public class Controller {
         this.lanes.add(laneTen);
         this.lanes.add(laneEleven);
 
-        for (Lane currentLane:lanes)
+        for (Lane currentLane:this.lanes)
         {
             currentLane.start();
         }
@@ -171,7 +186,7 @@ public class Controller {
     {
         int number = Integer.parseInt(txfNumberOfCars.getText());
         Speeds vel;
-        int y = 0;
+
         switch (speed){
             case 0 :
                 vel=Speeds.SLOW;
@@ -180,7 +195,7 @@ public class Controller {
                 }
                 else
                 {
-                    insertVh_RandomLane(speed,number,y,vel);
+                    insertVh_RandomLane(speed,number,vel);
                 }
                 break;
             case 1 :
@@ -190,7 +205,7 @@ public class Controller {
                 }
                 else
                 {
-                    insertVh_RandomLane(speed,number,y,vel);
+                    insertVh_RandomLane(speed,number,vel);
                 }
                 break;
             case 2 :
@@ -200,7 +215,7 @@ public class Controller {
                 }
                 else
                 {
-                    insertVh_RandomLane(speed,number,y,vel);
+                    insertVh_RandomLane(speed,number,vel);
                 }
                 break;
         }
@@ -211,27 +226,29 @@ public class Controller {
         for(int i = 0; i < lanes.size(); i++){
             vehiclesByLane.add(lanes.get(i).getVehicles().size());
         }
-        System.out.println("InsertVc");
-        int minIndex = vehiclesByLane.indexOf(Collections.min(vehiclesByLane));
-        MovingVehicle jc0 = new MovingVehicle(lanes.get(minIndex).getxLeft(), 0, speed , true , false , vel , true);
-        lanes.get(minIndex).addVehicle(jc0);
-        vehicles.add(jc0);
-        jc0.start();
+
+        if(this.goingDown){
+            int minIndex = vehiclesByLane.indexOf(Collections.min(vehiclesByLane));
+            MovingVehicle jc0 = new MovingVehicle(lanes.get(minIndex).getxLeft(), 0, speed , true , this.goingDown , vel , true);
+            lanes.get(minIndex).addVehicle(jc0);
+            //vehicles.add(jc0);
+            jc0.start();
+        }
     }
 
-    public void insertVh_RandomLane(int speed, int howMany, int y , Speeds vel) throws FileNotFoundException {
-        int i = 0;
-        while(i < howMany){
-            System.out.println("InsertVh_RandomLane");
-            int intAletorio = aleatorio.nextInt(11);
-            int x =lanes.get(intAletorio).getxLeft();
-            aleatorio.setSeed(System.currentTimeMillis());
-            Lane temp = this.lanes.get(intAletorio);
-            MovingVehicle jc0 = new MovingVehicle(x, y, speed , true , false , vel , true);
-            temp.addVehicle(jc0);
-            vehicles.add(jc0);
-            jc0.start();
-            i += 1;
+    public void insertVh_RandomLane(int speed, int howMany, Speeds vel) throws FileNotFoundException {
+        if(this.goingDown){
+            int i = 0;
+            while(i < howMany){
+                int intAleatorio = aleatorio.nextInt(11);
+                Lane temp = this.lanes.get(intAleatorio);
+                int x = temp.getxLeft();
+                aleatorio.setSeed(System.currentTimeMillis());
+                MovingVehicle jc0 = new MovingVehicle(x, 0, speed , true , this.goingDown , vel , true);
+                temp.addVehicleLane(jc0);
+                jc0.start();
+                i+=1;
+            }
         }
     }
 
@@ -283,24 +300,25 @@ public class Controller {
         g.clearRect(0, 0, 1900, 1000);
         g.drawImage(backgroundImage , 0 , 0);
 
-        for (Vehicle currentVehicle : this.vehicles)
+        for (Lane currentLane : this.lanes)
         {
-            g.drawImage(currentVehicle.getImage() , currentVehicle.getX() , currentVehicle.getY());
+            for (MovingVehicle currentVehicle : currentLane.getVehicles())
+            {
+                g.drawImage(currentVehicle.getImage() , currentVehicle.getX() , currentVehicle.getY());
+            }
+
         }
-        /*g.drawImage(this.image, 0, 0);
-        g.drawImage(this.sc.getImage(), this.sc.getX(), this.sc.getY());*/
     }
 
     //Voids GUI
     //TODO: Put this in Lane Class
     public void changeDirection()
     {
+        this.goingDown=!this.goingDown;
         //Grab LaneArrayList and change direction
-        for (Lane currentLane : lanes) {
-            currentLane.changeMovementDirection();
-            //System.out.println("set Moving false");
+        for(int i = 0; i < this.lanes.size(); i++){
+            this.lanes.get(i).changeMovementDirection(this.goingDown);
         }
-
     }
 
     public void increaseSpeed(){
@@ -341,7 +359,7 @@ public class Controller {
             for (Lane currentLane : lanes) {
                 currentLane.interruptVehicleMovement();
             }
-            trafficLigth=false;
+            this.trafficLigth=!this.trafficLigth;
         }
         else{
 
@@ -350,7 +368,7 @@ public class Controller {
             for (Lane currentLane : lanes) {
                 currentLane.interruptVehicleMovement();
             }
-            trafficLigth=true;
+            this.trafficLigth=!this.trafficLigth;
         }
     }
 
