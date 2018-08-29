@@ -1,8 +1,5 @@
 package Domain;
 
-import sun.awt.windows.ThemeReader;
-import sun.security.provider.MD4;
-
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -18,14 +15,15 @@ public class Lane extends Thread {
     private int positionBarrierUp;
     private int positionBarrierBottom;
     private boolean goingDown;
-    private boolean trafficLightRed;
+    private boolean pause;
     private boolean wall;
     private boolean running;
     private Queue<MovingVehicle> queueVehicles;
 
 
     public Lane(int xLeft, int xRight, int yTop, int yBottom,
-                int positionBarrierUp, int positionBarrierBottom , boolean goingDown , boolean trafficLightRed) {
+                int positionBarrierUp, int positionBarrierBottom , boolean goingDown) {
+
         this.vehicles = new ArrayList<>();
         this.xLeft = xLeft;
         this.xRight = xRight;
@@ -34,10 +32,10 @@ public class Lane extends Thread {
         this.positionBarrierUp = positionBarrierUp;
         this.positionBarrierBottom = positionBarrierBottom;
         this.goingDown = goingDown;
-        this.trafficLightRed = trafficLightRed;
         this.wall=true;
         this.queueVehicles = new LinkedList<>();
         this.running = true;
+        this.pause = true;
     }
 
     public boolean isWall() {
@@ -52,12 +50,12 @@ public class Lane extends Thread {
         return vehicles;
     }
 
-    public boolean isTrafficLightRed() {
-        return trafficLightRed;
+    public boolean isPause() {
+        return pause;
     }
 
-    public void setTrafficLightRed(boolean trafficLightRed) {
-        this.trafficLightRed = trafficLightRed;
+    public void setPause(boolean pause) {
+        this.pause = pause;
     }
 
     public boolean isGoingDown() {
@@ -144,84 +142,116 @@ public class Lane extends Thread {
 
     public void interruptVehicleMovement()
     {
-        this.trafficLightRed=!this.trafficLightRed;
-        for (MovingVehicle currentVehicle:vehicles) {
-            currentVehicle.setMoving(!this.trafficLightRed);
-            //System.out.println("set Moving false");
+        if(this.pause)
+        {
+            for (MovingVehicle currentVehicle:vehicles) {
+                currentVehicle.setMoving(false);
+            }
+            this.pause=false;
+        }
+        else{
+            for (MovingVehicle currentVehicle:vehicles) {
+                currentVehicle.setMoving(true);
+            }
+            this.pause=true;
         }
     }
 
     public void verifyMovement()
     {
-        if(goingDown)
-        {
-            for(int i = 0; i < this.vehicles.size(); i++){
-                MovingVehicle v = this.vehicles.get(i);
-                int posY = (int)v.getY() + 10;//next iteration
-                if(i == 0)
-                {
-                    if(!youShallNotPass(posY))
-                    {
-                        v.setMoving(false);
-                    }else{
-                        v.setMoving(true);
-                    }
-                }else{
-                    MovingVehicle nextVehicle = this.vehicles.get(i-1);
-                    int posY_Next = (int) nextVehicle.getY() + 10;
-                    boolean accident = isThereAnAccident(posY,posY_Next,true);
-                    if(!accident || !youShallNotPass(posY))
-                    {
-                        v.setMoving(false);
-                    }else{
-                        v.setMoving(true);
-                    }
-                }
-            }
-        }
-        else{
-            for(int i = 0; i < this.vehicles.size(); i++)
+        if(this.pause){
+            if(goingDown)
             {
-                MovingVehicle me = this.vehicles.get(i);
-                int posY_Me = me.getY() - 10;
-                if(i == this.vehicles.size()-1)
-                {
-                    System.out.println("Hcesss");
-                    if(!youShallNotPass(posY_Me))
+                for(int i = 0; i < this.vehicles.size(); i++){
+                    MovingVehicle vehicleTemp = this.vehicles.get(i);
+                    int posY = vehicleTemp.getY();
+
+                    if(i == 0)
                     {
-                        me.setMoving(false);
-                    }else{
-                        me.setMoving(true);
+                        if(!isBarrierInFront(posY))
+                        {
+                            vehicleTemp.setMoving(false);
+                        }else{
+                            vehicleTemp.setMoving(true);
+                        }
                     }
-                }else{
-                    MovingVehicle beforeMe = this.vehicles.get(i + 1);
-                    int posY_BeforeMe = beforeMe.getY() - 10;
-                    boolean accident = isThereAnAccident(posY_BeforeMe, posY_Me,false);
-                    if(!accident || !youShallNotPass(posY_Me))
+                    else
                     {
-                        me.setMoving(false);
-                    }else{
-                        me.setMoving(true);
+                        MovingVehicle nextVehicle = this.vehicles.get(i-1);
+                        int posY_Next = (int) nextVehicle.getY();
+                        boolean accident = isThereAnAccident(posY_Next+10,posY+10,true);
+
+                        if(accident || !isBarrierInFront(posY))
+                        {
+                            vehicleTemp.setMoving(false);
+
+                        }
+                        else{
+
+                            vehicleTemp.setMoving(true);
+
+                        }
+
+                    }
+                }
+            }
+            else
+            {
+                for(int i = 0; i < this.vehicles.size(); i++){
+                    MovingVehicle vehicleTemp = this.vehicles.get(i);
+                    int posY = vehicleTemp.getY();
+
+                    if(i == this.vehicles.size()-1)
+                    {
+                        if(!isBarrierInFront(posY))
+                        {
+                            vehicleTemp.setMoving(false);
+                        }else{
+                            vehicleTemp.setMoving(true);
+                        }
+                    }
+                    else
+                    {
+                        MovingVehicle nextVehicle = this.vehicles.get(i+1);
+                        int posY_Next = (int) nextVehicle.getY();
+                        boolean accident = isThereAnAccident(posY-10,posY_Next-10,true);
+
+                        if(accident || !isBarrierInFront(posY_Next))
+                        {
+                            vehicleTemp.setMoving(false);
+
+                        }
+                        else{
+
+                            vehicleTemp.setMoving(true);
+
+                        }
                     }
                 }
             }
         }
+
+
     }
 
     public boolean isThereAnAccident(int posY_VehicleOne, int posY_VehicleTwo, boolean direction)
     {
-        if(posY_VehicleOne - posY_VehicleTwo >= 128){
+        if(posY_VehicleOne - posY_VehicleTwo >= 160){
+
             return false;
-        }else{
+
+        }
+        else{
             return true;
         }
     }
 
-    public boolean youShallNotPass(int posY_Vehicle){
+    public boolean isBarrierInFront(int posY_Vehicle){
+
         if(this.wall){
             //the vehicle is far of the wall
             if(this.goingDown){
-                if(posY_Vehicle >=240 && posY_Vehicle<=250)
+                if(posY_Vehicle >=230 && posY_Vehicle<=250)
                 {
                     return false;
                 }
@@ -229,7 +259,7 @@ public class Lane extends Thread {
                     return true;
                 }
             }else{
-                if(posY_Vehicle >=240 && posY_Vehicle<=400)
+                if(posY_Vehicle >=240 && posY_Vehicle<=420)
                 {
                     return false;
                 }
@@ -279,37 +309,52 @@ public class Lane extends Thread {
         this.vehicles.remove(i);
     }
 
+
     public void addVehicleLane(MovingVehicle v)
     {
+
         v.setX(this.xLeft);
         if(!this.vehicles.isEmpty()){
-            int posY_LastVehicle = getPosY_LastVehicle();
-            if((posY_LastVehicle-80) < 80){//I suppose this is the min posY of a vehicle
-                v.setMoving(false);
-                this.queueVehicles.add(v);
-            }else{
-                v.setMoving(true);
-                v.setGoingDown(goingDown);
-                this.vehicles.add(v);
+            if(goingDown)
+            {
+                int posY_LastVehicle = getPosY_LastVehicle();
+                if((posY_LastVehicle) < 70){//I suppose this is the min posY of a vehicle
+                    v.setMoving(false);
+                    this.queueVehicles.add(v);
+                }else{
+                    v.setMoving(true);
+                    this.vehicles.add(v);
+                }
             }
+            else{
+                int posY_FirstVehicle = this.vehicles.get(0).getY();
+                if((posY_FirstVehicle+70) > 550){//I suppose this is the min posY of a vehicle
+                    v.setMoving(false);
+                    this.queueVehicles.add(v);
+                }else{
+                    v.setMoving(true);
+                    this.vehicles.add(0,v);
+                }
+            }
+
         }else{
             v.setMoving(true);
             v.setGoingDown(goingDown);
             this.vehicles.add(v);
         }
+
     }
-    
-    public void checkQueue()
-    {
+
+    public void checkQueue(){
+
         if(!this.queueVehicles.isEmpty()){
             int posY_LastVehicle = getPosY_LastVehicle();
-            if((posY_LastVehicle-80) > 80) {
+            if((posY_LastVehicle) > 70){
                 MovingVehicle v = this.queueVehicles.poll();
                 v.setMoving(true);
-                v.setGoingDown(goingDown);
-                this.vehicles.add(v);
             }
         }
+
     }
     //Here we validate vehicle movement
     @Override

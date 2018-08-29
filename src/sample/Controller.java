@@ -28,7 +28,7 @@ public class Controller {
 
     //Vars
     private boolean areBarriersOn;
-    private boolean trafficLigth;
+    private boolean pause;
 
     //Vars GUI
     private int speed=0;
@@ -101,7 +101,7 @@ public class Controller {
         barrierTen = false;
         barrierEleven = false;
 
-        this.trafficLigth= true;
+        this.pause= false;
 
         this.aleatorio = new Random(System.currentTimeMillis());
         this.stage = stage;
@@ -117,17 +117,17 @@ public class Controller {
         int barrierUp=365;
         int barrierBottom=370;
 
-        Lane laneOne = new Lane(145 , 235 , yTop , yBottom ,barrierUp , barrierBottom , this.goingDown , false );
-        Lane laneTwo = new Lane(285 , 365 , yTop , yBottom ,barrierUp , barrierBottom , this.goingDown , false );
-        Lane laneThree = new Lane(420 , 500 , yTop , yBottom ,barrierUp , barrierBottom , this.goingDown , false );
-        Lane laneFour = new Lane(555 , 635 , yTop , yBottom ,barrierUp , barrierBottom , this.goingDown , false );
-        Lane laneFive = new Lane(690 , 770 , yTop , yBottom ,barrierUp , barrierBottom , this.goingDown , false );
-        Lane laneSix = new Lane(828 , 908 , yTop , yBottom ,barrierUp , barrierBottom , this.goingDown , false );
-        Lane laneSeven = new Lane(962 , 1042 , yTop , yBottom ,barrierUp , barrierBottom , this.goingDown , false );
-        Lane laneEight = new Lane(1100 , 1180 , yTop , yBottom ,barrierUp , barrierBottom , this.goingDown , false );
-        Lane laneNine = new Lane(1235 , 1315 , yTop , yBottom ,barrierUp , barrierBottom , this.goingDown , false );
-        Lane laneTen = new Lane(1370 , 1450 , yTop , yBottom ,barrierUp , barrierBottom , this.goingDown , false );
-        Lane laneEleven = new Lane(1506 , 1586 , yTop , yBottom ,barrierUp , barrierBottom , this.goingDown , false );
+        Lane laneOne = new Lane(145 , 235 , yTop , yBottom ,barrierUp , barrierBottom , this.goingDown);
+        Lane laneTwo = new Lane(285 , 365 , yTop , yBottom ,barrierUp , barrierBottom , this.goingDown);
+        Lane laneThree = new Lane(420 , 500 , yTop , yBottom ,barrierUp , barrierBottom , this.goingDown);
+        Lane laneFour = new Lane(555 , 635 , yTop , yBottom ,barrierUp , barrierBottom , this.goingDown);
+        Lane laneFive = new Lane(690 , 770 , yTop , yBottom ,barrierUp , barrierBottom , this.goingDown);
+        Lane laneSix = new Lane(828 , 908 , yTop , yBottom ,barrierUp , barrierBottom , this.goingDown);
+        Lane laneSeven = new Lane(962 , 1042 , yTop , yBottom ,barrierUp , barrierBottom , this.goingDown);
+        Lane laneEight = new Lane(1100 , 1180 , yTop , yBottom ,barrierUp , barrierBottom , this.goingDown);
+        Lane laneNine = new Lane(1235 , 1315 , yTop , yBottom ,barrierUp , barrierBottom , this.goingDown);
+        Lane laneTen = new Lane(1370 , 1450 , yTop , yBottom ,barrierUp , barrierBottom , this.goingDown);
+        Lane laneEleven = new Lane(1506 , 1586 , yTop , yBottom ,barrierUp , barrierBottom , this.goingDown);
 
         this.lanes.add(laneOne);
         this.lanes.add(laneTwo);
@@ -220,25 +220,37 @@ public class Controller {
             int minIndex = vehiclesByLane.indexOf(Collections.min(vehiclesByLane));
             MovingVehicle jc0 = new MovingVehicle(lanes.get(minIndex).getxLeft(), 0, speed , true , this.goingDown , vel , true);
             lanes.get(minIndex).addVehicle(jc0);
-            //vehicles.add(jc0);
             jc0.start();
+        }
+        else{
+            int minIndex = vehiclesByLane.indexOf(Collections.min(vehiclesByLane));
+            MovingVehicle newVehicle = new MovingVehicle(lanes.get(minIndex).getxLeft(), 630, speed , true , false , vel , true);
+            lanes.get(minIndex).addVehicleLane(newVehicle);
+            newVehicle.start();
         }
     }
 
     public void insertVh_RandomLane(int speed, int howMany, Speeds vel) throws FileNotFoundException
     {
-        if(this.goingDown){
-            int i = 0;
-            while(i < howMany){
-                int intAleatorio = aleatorio.nextInt(11);
-                Lane temp = this.lanes.get(intAleatorio);
-                int x = temp.getxLeft();
-                aleatorio.setSeed(System.currentTimeMillis());
-                MovingVehicle jc0 = new MovingVehicle(x, 0, speed , true , this.goingDown , vel , true);
-                temp.addVehicleLane(jc0);
-                jc0.start();
-                i+=1;
+        int i = 0;
+        while(i < howMany)
+        {
+            int intAleatorio = aleatorio.nextInt(11);
+            if(this.goingDown){
+                        aleatorio.setSeed(System.currentTimeMillis());
+                        MovingVehicle jc0 = new MovingVehicle(this.lanes.get(intAleatorio).getxLeft(), 0, speed , true , this.goingDown , vel , true);
+                        this.lanes.get(intAleatorio).addVehicleLane(jc0);
+                        jc0.start();
+
             }
+            else{
+
+                aleatorio.setSeed(System.currentTimeMillis());
+                MovingVehicle newVehicle = new MovingVehicle(this.lanes.get(intAleatorio).getxLeft(), 630, speed , true , false , vel , true);
+                this.lanes.get(intAleatorio).addVehicleLane(newVehicle);
+                newVehicle.start();
+            }
+            i+=1;
         }
     }
 
@@ -263,6 +275,7 @@ public class Controller {
     }
 
     //Voids GUI
+
     //TODO: Put this in Lane Class
     public void changeDirection()
     {
@@ -306,28 +319,30 @@ public class Controller {
         }
     }
 
-    public void interruptVehicleMovement()
+    public void startSimulation()
     {
 
-        if(trafficLigth)
-        {
-            Image imageTrafficLigthRed = new Image("Assets/traffic_light_red_icon.png");
+
+    }
+
+    public void interruptVehicleMovement()
+    {
+        if(this.pause){
+            Image imageTrafficLigthRed = new Image("Assets/traffic_light_green_icon.png");
             imageTrafficLigth.setImage(imageTrafficLigthRed);
-            for (Lane currentLane : lanes)
-            {
+            for (Lane currentLane : lanes) {
                 currentLane.interruptVehicleMovement();
             }
-            this.trafficLigth=!this.trafficLigth;
+            this.pause=false;
         }
         else{
 
-            Image imageTrafficLigthGreen = new Image("Assets/traffic_light_green_icon.png");
+            Image imageTrafficLigthGreen = new Image("Assets/traffic_light_red_icon.png");
             imageTrafficLigth.setImage(imageTrafficLigthGreen);
-            for (Lane currentLane : lanes)
-            {
+            for (Lane currentLane : lanes) {
                 currentLane.interruptVehicleMovement();
             }
-            this.trafficLigth=!this.trafficLigth;
+            this.pause=true;
         }
     }
 
